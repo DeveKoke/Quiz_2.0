@@ -1,4 +1,109 @@
-.acordeon {
+@import url('https://fonts.googleapis.com/css2?family=Caesar+Dressing&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Aleo:wght@300;400;700&display=swap');
+
+
+/* TAGS */
+
+/* html{
+  margin: 0;
+  padding: 0;
+
+} */
+body{
+  margin: 0;
+  background-color: rgb(239, 220, 196);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+header{
+  background-color: white;
+  width: 90%;
+  margin: 1em auto 0;
+  padding: .4em 0em;
+  border-radius: 4%;
+  position: relative;
+
+}
+h1{
+  text-align: center;
+  font-family: Caesar Dressing;
+  font-size: 2.5em;
+}
+h2{
+  font-family: Aleo;
+}
+main{
+background-image: url('assets/backgroundindex.jpg') ;
+background-repeat: no-repeat;
+background-size: contain;
+padding: 1em .4em 1em;
+flex-grow: 1;
+}
+p{
+  text-align: center;
+  font-family: Aleo;
+}
+footer{
+background: linear-gradient(180deg, rgb(25, 117, 117) 0%, rgb(22, 90, 74) 100%);
+  color: rgb(243, 238, 222);
+  padding: 1em 0em 1.3em;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+
+
+/* DIV CONTAINERS */
+.main_bis{
+margin-top: -2em;
+}
+#encabezado{
+  background-color: rgb(243, 238, 222);
+  border-radius: 2%;
+  text-align: center;
+  padding: .5em .2em;
+  margin: 0% 3% 3%
+}
+.frontWrapper{
+  background-color: rgb(243, 238, 222);
+  border-radius: 2%;
+  padding: .5em .6em;
+  margin: 0% 3%;
+}
+#divButton{
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+.progress{
+  height: 1.5em;
+  width: 1.5em;
+  background-color: rgb(241, 239, 235);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: solid #67adb5 ;
+  font-family: Aleo;
+  padding-top: 1.5px;
+  font-weight: bolder;
+  color: rgb(22, 90, 74);
+}
+#progressWrapper{
+  margin-top: 4.5em;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+}
+
+
+
+/* BQUESTION BOX ANIMATION */
+/* .acordeon {
     width: 88%;
     height: 47em;
     padding: 2.5em 0em;
@@ -32,5 +137,23 @@
       box-shadow: 1px 1px .1em #67adb5;
       background-color: #bde6fc;
       color: white;
-    } 
-  
+    }  */
+
+
+
+/* BUTTONS */
+#button{
+  width: 38%;
+  height: 3.2em;
+  margin-top: 2em;
+  font-weight: bolder;
+  font-size: medium;
+  letter-spacing: 3px;
+  background-color: rgb(111, 65, 65);
+  color: rgb(239, 220, 196);
+  border-radius: 5% / 5%;
+}
+#button:hover{
+  box-shadow: 0 0px 13px 3px rgb(84, 82, 82);
+  background-color: rgb(25, 117, 117)
+}
