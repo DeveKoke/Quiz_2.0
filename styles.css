@@ -1,4 +1,7 @@
 * {
     background-color: black;
+}
 
+.hideCard{
+    display: none;
 }

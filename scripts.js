@@ -70,79 +70,93 @@ let questionsInfo = [{
 // Create question cards:
     //Instead of creating every card at first, we can "fetch" all de questions and create the cards one at a time. In the end, we show every card.
 
+    //when you click a button ("comenzar" and "siguiente"), the function "createQuestionCards" executes itself and it creates one card. When it's answered 
+    //the card is stored and hidden, and its prepared to repeat the process.
 
-function createQuestionCards(arr){
-    let collectionAnsId = [];
-    for(let i=0; i<arr.length; i++){
-        let {question, correctAnswer, wrongAnswers, img, alt} = arr[i];
-        let quesNum = i+1;
 
-        let correctAnsIndex = Math.floor(Math.random()*4);
-        let answers = wrongAnswers;
-        answers.splice(correctAnsIndex, 0, correctAnswer);
-        let correctAnsId;
 
-        let questionCard = `<article class="question_card">
-                                <h3>${quesNum}. ${question}</h3>
-                                <img src="${img}" alt="${alt}">
-                                <div class="radio_div">
-                                    <input type="radio" id="answer${quesNum}-0" name="ansQuest${quesNum}" value="${answers[0]}"><label for="answer${quesNum}-0">${answers[0]}</label>
-                                    <input type="radio" id="answer${quesNum}-1" name="ansQuest${quesNum}" value="${answers[1]}"><label for="answer${quesNum}-1">${answers[1]}</label>
-                                    <input type="radio" id="answer${quesNum}-2" name="ansQuest${quesNum}" value="${answers[2]}"><label for="answer${quesNum}-2">${answers[2]}</label>
-                                    <input type="radio" id="answer${quesNum}-3" name="ansQuest${quesNum}" value="${answers[3]}"><label for="answer${quesNum}-3">${answers[3]}</label>
-                                </div>
-                            </article>`
-        
-        correctAnsId = `answer${quesNum}-${correctAnsIndex}`;
-        collectionAnsId.push(correctAnsId);
-        quizForm.innerHTML += questionCard;
+let quesIndex = 0;
+let correctAnsId;
+let correctAnsIdColection = [];
+
+//"Next" button: if you have not answered the question you can't get the next one.
+function pressNextButton(questionObject){
+    if (quesIndex == questionObject.length-1){
+        let allCards = document.querySelectorAll(".question_card");
+        allCards.classList.remove("hideCard");
+
+    } else if (correctAnsIdColection.length<quesIndex){
+        // This could be a Sweet Alert!!
+        let alertMessage = `<article class="alertCard">
+            <h3>Stop right there!</h3>
+            <p>You are missing something... You haven't answered this question!</p>
+        </article>`
+        quizSection.innerHTML += alertMessage;
+    } else {
+        //Hide the previous card and go on with the next one
+        let currentCard = document.getElementById(`question_card_${quesIndex+1}`);
+        currentCard.classList.add("hideCard");
+        createQuestionCards(questionsInfo);
     }
-    let submitInput = `<input type="submit" id="submit" value="Send"><label for="submit">Enviar respuestas</label>`
-    quizForm.innerHTML += submitInput;
-    return collectionAnsId;
 }
 
-let allCorrectId = createQuestionCards(questionsInfo);
+function createQuestionCards(questionObject){
+    let quesNum = quesIndex + 1;
+    
+    let {question, correctAnswer, wrongAnswers, img, alt} = questionObject[quesIndex];
+    
+    let correctAnsIndex = Math.floor(Math.random()*4);
+    let answers = wrongAnswers.splice(correctAnsIndex, 0, correctAnswer);
+
+    let questionCard = `<article id="question_card_${quesNum}" class="question_card">
+                            <h3>${quesNum}. ${question}</h3>
+                            <img src="${img}" alt="${alt}">
+                            <div class="radio_div">
+                                <input type="radio" id="answer${quesNum}-0" name="ansQuest${quesNum}" value="${answers[0]}"><label for="answer${quesNum}-0">${answers[0]}</label>
+                                <input type="radio" id="answer${quesNum}-1" name="ansQuest${quesNum}" value="${answers[1]}"><label for="answer${quesNum}-1">${answers[1]}</label>
+                                <input type="radio" id="answer${quesNum}-2" name="ansQuest${quesNum}" value="${answers[2]}"><label for="answer${quesNum}-2">${answers[2]}</label>
+                                <input type="radio" id="answer${quesNum}-3" name="ansQuest${quesNum}" value="${answers[3]}"><label for="answer${quesNum}-3">${answers[3]}</label>
+                            </div>
+                        </article>`
+    quizForm.innerHTML += questionCard;
+
+    correctAnsId = `answer${quesNum}-${correctAnsIndex}`;
+    correctAnsIdColection.push(correctAnsId);
+    quesIndex++;
+}
+
+
+
+
+//Input submit general
+quizForm.innerHTML += '<input type="submit" id="submit" value="Send"><label for="submit">Enviar respuestas</label>';
+
 
 
 // Check the answers
-let userAnswers;
-quizForm.addEventListener("submit", function(event){
-    event.preventDefault();
-    
-    userAnswers = quizForm.querySelectorAll('input[type="radio"]:checked');
+function checkAnswers(questionsArr){
+    let userAnswers = quizForm.querySelectorAll('input[type="radio"]:checked');
     console.log(userAnswers)
-    let correctAnswers = questionsInfo.map(item => item.correctAnswer);
+    let correctAnswers = questionsArr.map(item => item.correctAnswer);
     let totalPoints = correctAnswers.length;
     let score = 0;
-    
-    if(userAnswers.length != totalPoints){
-        let alertCard = `<article class="alertCard">
-            <h3>Stop right there!</h3>
-            <p>You are missing something... there are questions you haven't answered.</p>
-            <input type="radio" id="checkMissingAnswers" name="checkMissingAnswers" value="checkMissingAnswers">
-            <label for="checkMissingAnswers">Let's look for them!</label>
-        </article>`
-        quizSection.innerHTML += alertCard;
- 
-    } else {
-        //Colour wrong answers:
-        for(let i=0; i<correctAnswers.length; i++){
-            if(correctAnswers[i]==userAnswers[i].value){
-                score++;
-                let correctAnsLabel = document.querySelector(`label[for="${allCorrectId[i]}"]`);
-                correctAnsLabel.style.background = "green";
-            } else {
-                let correctAnsLabel = document.querySelector(`label[for="${allCorrectId[i]}"]`);
-                correctAnsLabel.style.background = "green";
-                let incorrectAnsLabel = document.querySelector(`label[for="${userAnswers[i].id}"]`);
-                incorrectAnsLabel.style.background = "red";
-            }
+
+    //Colour answers:
+    for(let i=0; i<correctAnswers.length; i++){
+        if(correctAnswers[i]==userAnswers[i].value){
+            score++;
+            let correctAnsLabel = document.querySelector(`label[for="${correctAnsIdColection[i]}"]`);
+            correctAnsLabel.style.background = "green";
+        } else {
+            let correctAnsLabel = document.querySelector(`label[for="${correctAnsIdColection[i]}"]`);
+            correctAnsLabel.style.background = "green";
+            let incorrectAnsLabel = document.querySelector(`label[for="${userAnswers[i].id}"]`);
+            incorrectAnsLabel.style.background = "red";
         }
-    
-        // Congratulations card:
-        quizForm.classList.add("hideQuiz");
-    
+    }
+
+    // Congratulations card:
+        
         let finalQuizMessages = [{
             title: "Congratulations!",
             message: "You are practically an architect!",
@@ -182,15 +196,4 @@ quizForm.addEventListener("submit", function(event){
             <button onclick="showAnswers()">Check answers</button>
         </article>`
         quizSection.innerHTML += congratsCard;
-    }
-})
-
-//Button function: Removes congrats card and shows all the question cards again.
-function showAnswers(){
-    document.getElementById("congrats_card").remove();
-    let quizForm2 = document.querySelector(".quizForm");
-    quizForm2.classList.remove("hideQuiz");
 }
-
-
-
