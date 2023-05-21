@@ -1,4 +1,36 @@
-* {
-    background-color: black;
-
-}
+.acordeon {
+    width: 88%;
+    height: 47em;
+    padding: 2.5em 0em;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0 6%;
+  }
+  .acordeonBox { 
+    flex-basis: 10%;
+    height: 100%;
+    margin-bottom: 1em;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: helvetica;
+    background-color: #e6f8ff;
+    cursor: pointer;
+    box-shadow: 2px 2px .3em #67adb5;
+    transition: 
+      flex-grow .8s linear,
+      background-color .5s ease;
+  }
+  
+  .acordeonBox:hover { 
+      background-color: #cde9f7;
+      flex-grow: 3;
+    } 
+    .acordeonBox:active { 
+      box-shadow: 1px 1px .1em #67adb5;
+      background-color: #bde6fc;
+      color: white;
+    } 
+  
