@@ -99,16 +99,22 @@ function createCongratsCard(score){
 let quesIndex = 0;
 let quesNum = quesIndex + 1;
 
+let totalQuestions = questionsInfo.length;//NUMERO DE PREGUNTAS!!
+let pressedNext = -1;
 let correctAnsCollection = {};
 let userAnsCollection = {};
 
 //"Next" button: if you have not answered the question you can't get the next one.
 function pressNextButton(){
+    let userChoices = Object.keys(userAnsCollection).length;
+    pressedNext++;
     if (quesIndex == 0){
         createQuestionCards(questionsInfo);
-    } else if ( false ){
+    } else if (userChoices != pressedNext){
         //Sweet Alert!!
         //Stop right there! You are missing something... You haven't answered this question!
+        console.log("Stop right there! You are missing something... You haven't answered this question!");
+        pressedNext--;
     } else {
         //Hide the previous card and go on with the next one 
         let currentCard = document.querySelector(`#question_card_${quesNum}`);
@@ -118,7 +124,7 @@ function pressNextButton(){
             document.querySelector(".button").classList.add("hideCard");
             let divButton = document.querySelector("#divButton");
             divButton.innerHTML += '<button id="endQuiz" onclick="checkAnswers()" class="button">Finalizar Quiz</button>';
-            acordeon.appendChild(divButton);
+            acordeon.appendChild(divButton); 
         }
     }
 }
@@ -137,10 +143,10 @@ function createQuestionCards(questionsInfo){
     let questionCard = `<article id="question_card_${quesNum}" class="question_card">
         <h3>${quesNum}. ${question}</h3>
         <div class="radio_div">
-            <button id="answer${quesNum}-0" class="question${quesNum}" onclick="markAnswer('question${quesNum}', '${answers[0]}', 'answer${quesNum}-0')" value="${answers[0]}">${answers[0]}</button>
-            <button id="answer${quesNum}-1" class="question${quesNum}" onclick="markAnswer('question${quesNum}', '${answers[1]}', 'answer${quesNum}-1')" value="${answers[1]}">${answers[1]}</button>
-            <button id="answer${quesNum}-2" class="question${quesNum}" onclick="markAnswer('question${quesNum}', '${answers[2]}', 'answer${quesNum}-2')" value="${answers[2]}">${answers[2]}</button>
-            <button id="answer${quesNum}-3" class="question${quesNum}" onclick="markAnswer('question${quesNum}', '${answers[3]}', 'answer${quesNum}-3')" value="${answers[3]}">${answers[3]}</button>
+            <button id="answer${quesNum}-0" class="question${quesNum}" onclick="markAnswer('question${quesNum}', '${answers[0]}', 'answer${quesNum}-0')">${answers[0]}</button>
+            <button id="answer${quesNum}-1" class="question${quesNum}" onclick="markAnswer('question${quesNum}', '${answers[1]}', 'answer${quesNum}-1')">${answers[1]}</button>
+            <button id="answer${quesNum}-2" class="question${quesNum}" onclick="markAnswer('question${quesNum}', '${answers[2]}', 'answer${quesNum}-2')">${answers[2]}</button>
+            <button id="answer${quesNum}-3" class="question${quesNum}" onclick="markAnswer('question${quesNum}', '${answers[3]}', 'answer${quesNum}-3')">${answers[3]}</button>
         </div>
     </article>`
     acordeon.innerHTML += questionCard;
@@ -183,9 +189,6 @@ function checkAnswers(){
 
         let userAnswer = userAnsCollection[questionNumbersArr[i]].answer
         let userId = userAnsCollection[questionNumbersArr[i]].id
-
-        console.log(correctAnswer, correctId)
-        console.log(userAnswer, userId)
 
         if(correctAnswer == userAnswer){
             score++;
