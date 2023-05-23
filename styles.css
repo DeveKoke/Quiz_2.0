@@ -4,11 +4,6 @@
 
 /* TAGS */
 
-/* html{
-  margin: 0;
-  padding: 0;
-
-} */
 body{
   margin: 0;
   background-color: rgb(239, 220, 196);
@@ -21,22 +16,25 @@ header{
   width: 90%;
   margin: 1em auto 0;
   padding: .4em 0em;
-  border-radius: 4%;
+  border-radius: 10px;
   position: relative;
-
+  border: solid 4px rgb(111, 65, 65);
 }
 h1{
   text-align: center;
   font-family: Caesar Dressing;
   font-size: 2.5em;
+  letter-spacing: 10px;
+  margin-bottom: 15px;
 }
 h2{
   font-family: Aleo;
+  margin: 5px auto;
 }
 main{
-background-image: url('assets/backgroundindex.jpg') ;
+background-image: url('assets/fondoMain.jpg') ;
 background-repeat: no-repeat;
-background-size: contain;
+background-size: 135%;
 padding: 1em .4em 1em;
 flex-grow: 1;
 }
@@ -44,33 +42,46 @@ p{
   text-align: center;
   font-family: Aleo;
 }
+label{
+  margin: 12px 0 5px;
+  font-family: Aleo;
+}
 footer{
-background: linear-gradient(180deg, rgb(25, 117, 117) 0%, rgb(22, 90, 74) 100%);
+  background: linear-gradient(180deg, rgb(33, 128, 128) 0%, rgb(22, 90, 74) 100%);
   color: rgb(243, 238, 222);
-  padding: 1em 0em 1.3em;
+  padding: .2em 0em .5em;
   position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
+}
+input[type=number]{
+  width: 5em;
+}
+select{
+  width: 2em;
 }
 
 
 
 /* DIV CONTAINERS */
 .main_bis{
-margin-top: -2em;
+margin-top: -2.6em;
+background-size: 145%;
+background-position: top;
+
 }
 #encabezado{
   background-color: rgb(243, 238, 222);
-  border-radius: 2%;
+  border-radius:10px;
   text-align: center;
   padding: .5em .2em;
   margin: 0% 3% 3%
 }
 .frontWrapper{
   background-color: rgb(243, 238, 222);
-  border-radius: 2%;
-  padding: .5em .6em;
+  border-radius: 10px;
+  padding: .1em .6em;
   margin: 0% 3%;
 }
 #divButton{
@@ -142,18 +153,20 @@ align-items: center;
 
 
 /* BUTTONS */
-#button{
-  width: 38%;
-  height: 3.2em;
-  margin-top: 2em;
+.button{
+  width: 60%;
+  height: 3.6em;
+  margin-top: .9em;
   font-weight: bolder;
   font-size: medium;
   letter-spacing: 3px;
   background-color: rgb(111, 65, 65);
   color: rgb(239, 220, 196);
-  border-radius: 5% / 5%;
+  border-radius: 10px;
+  letter-spacing: 7px;
 }
-#button:hover{
+.button:hover{
   box-shadow: 0 0px 13px 3px rgb(84, 82, 82);
-  background-color: rgb(25, 117, 117)
+  background-color: rgb(25, 117, 117);
+  cursor: pointer;
 }
