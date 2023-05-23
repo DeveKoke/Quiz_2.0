@@ -7,44 +7,44 @@ let acordeon = document.querySelector(".acordeon");
 // Questions Info: In "fase 3", a function is needed to call the API for the questions info
 let questionsInfo = [{
     question: '¿En qué ciudad se encuentra el edificio Chrysler?',
-    correctAnswer: "Nueva York",
-    wrongAnswers: ["Chicago","París","Amsterdam"],
+    correct_answer: "Nueva York",
+    incorrect_answers: ["Chicago","París","Amsterdam"],
 },{
     question: '¿En qué año se terminó de construir la Opera de Sidney?',
-    correctAnswer: "1973",
-    wrongAnswers: ["1898","1952","1999"],
+    correct_answer: "1973",
+    incorrect_answers: ["1898","1952","1999"],
 },{
     question: '¿En qué ciudad española se encuentra el edificio comúnmente conocido como "la Corona de Espinas"?',
-    correctAnswer: "Madrid",
-    wrongAnswers: ["Barcelona","Sevilla","Bilbao"],
+    correct_answer: "Madrid",
+    incorrect_answers: ["Barcelona","Sevilla","Bilbao"],
 },{
     question: '¿A qué se refieren las siglas "AEC" relacionadas con el sector de la construcción a día de hoy?',
-    correctAnswer: "Architecture, Engeneering and construction",
-    wrongAnswers: ["Acero, Eficiencia y Calor","Air, Elements and Cars","No significan nada"],
+    correct_answer: "Architecture, Engeneering and construction",
+    incorrect_answers: ["Acero, Eficiencia y Calor","Air, Elements and Cars","No significan nada"],
 },{
     question: '¿Cuál de estos arquitectos es el autor de una de las cuatro torres de Chamartín?',
-    correctAnswer: "Norman Foster",
-    wrongAnswers: ["Tadao Ando","Juan Herreros","Iñaki Ábalos"],
+    correct_answer: "Norman Foster",
+    incorrect_answers: ["Tadao Ando","Juan Herreros","Iñaki Ábalos"],
 },{
     question: '¿A qué altura se encuentra el piso más alto de la Torre Eiffel?',
-    correctAnswer: "300 metros",
-    wrongAnswers: ["200 metros","280 metros","400 metros"],
+    correct_answer: "300 metros",
+    incorrect_answers: ["200 metros","280 metros","400 metros"],
 },{
     question: 'El aire caliente tiende a ...',
-    correctAnswer: "Subir",
-    wrongAnswers: ["Bajar","Bajar brúscamente","Se queda donde está"],
+    correct_answer: "Subir",
+    incorrect_answers: ["Bajar","Bajar brúscamente","Se queda donde está"],
 },{
     question: 'Popularmente se dice que el Monasterio de El Escorial tiene un ...',
-    correctAnswer: "Ladrillo de oro",
-    wrongAnswers: ["Becerro de oro","Pomo de oro","Inhodoro de oro"],
+    correct_answer: "Ladrillo de oro",
+    incorrect_answers: ["Becerro de oro","Pomo de oro","Inhodoro de oro"],
 },{
     question: 'En los túneles que canalizan el agua en los jardines de La Granja en Segovia vive ...',
-    correctAnswer: "Una gran comunidad de murciélagos",
-    wrongAnswers: ["Los trabajadores que cuidan el jardín","Una jauría de lobos","El Yeti"],
+    correct_answer: "Una gran comunidad de murciélagos",
+    incorrect_answers: ["Los trabajadores que cuidan el jardín","Una jauría de lobos","El Yeti"],
 },{
     question: '¿Quién diseñó el Museo Solomon R. Guggenheim de Nueva York construido en 1937?',
-    correctAnswer: "Frank Lloyd Wright",
-    wrongAnswers: ["Norman Foster","Pablo Picasso","Antoni Gaudí"],
+    correct_answer: "Frank Lloyd Wright",
+    incorrect_answers: ["Norman Foster","Pablo Picasso","Antoni Gaudí"],
 }
 ]
 
@@ -92,11 +92,7 @@ function createCongratsCard(score){
 
 
 
-
 // Create question cards:
-    //Instead of creating every card at first, we can "fetch" all de questions and create the cards one at a time. In the end, we show every card.
-    //when you click a button ("comenzar" and "siguiente"), the function "createQuestionCards" executes itself and it creates one card. When it's answered 
-    //the card is stored and hidden, and its prepared to repeat the process.
 let quesIndex = 0;
 let quesNum = quesIndex + 1;
 
@@ -113,7 +109,6 @@ function pressNextButton(){
         createQuestionCards(questionsInfo);
     } else if (userChoices != pressedNext){
         //Sweet Alert!!
-        //Stop right there! You are missing something... You haven't answered this question!
         console.log("Stop right there! You are missing something... You haven't answered this question!");
         pressedNext--;
     } else {
@@ -134,12 +129,12 @@ function pressNextButton(){
 function createQuestionCards(questionsInfo){
     let correctAnsId;
     let questionObject = questionsInfo[quesIndex];
-    let {question, correctAnswer, wrongAnswers} = questionObject;
+    let {question, correct_answer, incorrect_answers} = questionObject;
     quesNum = quesIndex + 1;
 
     let correctAnsIndex = Math.floor(Math.random()*4);
-    let answers = wrongAnswers;
-    answers.splice(correctAnsIndex, 0, correctAnswer);
+    let answers = incorrect_answers;
+    answers.splice(correctAnsIndex, 0, correct_answer);
 
     let questionCard = `<article id="question_card_${quesNum}" class="question_card">
         <h3>${quesNum}. ${question}</h3>
@@ -155,23 +150,12 @@ function createQuestionCards(questionsInfo){
     correctAnsId = `answer${quesNum}-${correctAnsIndex}`;
     correctAnsCollection[`question${quesNum}`] = {"answer": answers[correctAnsIndex], "id": correctAnsId};
     quesIndex++;
-
 }
 
 // Mark the answer
-function markAnswer(questionNum, userAnswer, answerID){ //MEJOR CON BOTONES!!
+function markAnswer(questionNum, userAnswer, answerID){ 
     userAnsCollection[questionNum] = {"answer": userAnswer, "id": answerID};
-    console.log(userAnsCollection)
 }
-/* // Mark the answer
-function markAnswer(event){ //MEJOR CON BOTONES!!
-    let questionNum = event.target.class;
-    let userAnswer = event.target.value;
-    let answerID = event.target.id;
-
-    userAnsCollection[questionNum] = {"answer": userAnswer, "id": answerID};
-    console.log(userAnsCollection)
-} */
 
 
 
@@ -185,13 +169,13 @@ function checkAnswers(){
     allCards.forEach(item => item.classList.remove("hideCard"));
 
     for(let i=0; i<questionNumbersArr.length; i++){
-        let correctAnswer = correctAnsCollection[questionNumbersArr[i]].answer
+        let correct_answer = correctAnsCollection[questionNumbersArr[i]].answer
         let correctId = correctAnsCollection[questionNumbersArr[i]].id
 
         let userAnswer = userAnsCollection[questionNumbersArr[i]].answer
         let userId = userAnsCollection[questionNumbersArr[i]].id
 
-        if(correctAnswer == userAnswer){
+        if(correct_answer == userAnswer){
             score++;
             let correctAnsButton = document.querySelector(`#${correctId}`);
             correctAnsButton.style.background = "green";
@@ -213,45 +197,35 @@ function checkAnswers(){
     
 
 
-
-// AQUI EMPIEZA EL SCRIPT HECHO POR JB
-  
-  
-//* cambio a main.HTML al hacer clic en botón COMENZAR
-const startButton = document.getElementById('startButton');
-startButton.addEventListener('click', function() {
-    window.location.href = 'main.html';
-  });
   
 
 
-//* función para seleccionar preguntas random desde la API
-async function getRandomQuestions() { 
-    let randomQuestions = [];          //* Array donde van las preguntas random con las que va a jugar user.
-    const difficulty = document.getElementById('difficulty').value   //*  input user para elegir dificultad.
 
+
+// Función para seleccionar preguntas random desde la API
+async function getQuestionsAndBegin(){
+    let getQuestionsButton = document.querySelector(".kindWrapper");
+    getQuestionsButton.classList.add("hideCard")
+
+    const difficulty = document.getElementById('difficulty').value   //  input user para elegir dificultad.
+    let numQuestions = document.getElementById('userNum').value;  // input user para elegir # de preguntas.
     try{    
-        let response = await fetch(`https://opentdb.com/api.php?amount=50&category=23&difficulty=${difficulty}&type=multiple`);
+        let response = await fetch(`https://opentdb.com/api.php?amount=${numQuestions}&category=23&difficulty=${difficulty}&type=multiple`);
         let data = await response.json();
         let allQuestions = data.results;
 
-        let maxNum = document.getElementById('userNum').value;  //* input user para elegir # de preguntas.
-        let minNum = 5;
-        while (randomQuestions.length != minNum){
-        let num = Math.floor(Math.random()*maxNum);
-            if (!randomQuestions.includes(num)){
-            randomQuestions.push(allQuestions[num]);
-            }
-        }
-        return randomQuestions.length
+        console.log(allQuestions)
+
+        return allQuestions
     }
     catch(error){
-        console.log(`ERROR`)
+        console.log(`There is an error: ${error}`)
     }
 }
 
 
-// * Función para pintar los números de la barra de progreso
+
+// Función para pintar los números de la barra de progreso
 // getRandomQuestions().then(item => console.log(item))
 async function numBar (numberQuest) {
     try{
@@ -269,10 +243,20 @@ async function numBar (numberQuest) {
 
 
 
-// * función para cambiar color de span según el progreso
+// función para cambiar color de span según el progreso
 function changeSpanBar() {
     const spanNum = document.getElementById(`sp${quesIndex+1}`);
     spanNum.classList.remove('progressBef');
     spanNum.classList.add('progressAft'); //* comprobar si valdría solo con añadir la clase que contenga en CSS el cambio de background en vez de quitar una y poner otra.
 
 }
+
+
+
+
+
+// Cambio a main.HTML al hacer clic en botón COMENZAR ----> IMPORTANTE: TIENE QUE IR AL FINAL DEL SCRIPT
+const startButton = document.getElementById('startButton');
+startButton.addEventListener('click', function(){
+    // window.location.href = 'main.html';
+});

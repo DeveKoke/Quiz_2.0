@@ -10,11 +10,23 @@
             <h1>QUIZTORIA</h1>
         </header>
         <main class="main_bis">
+            <section class="kindWrapper">
+                <label>Elige dificultad: </label>
+                <select name="difficulty" id="difficulty" >
+                    <option value=""> ---</option>
+                    <option value="easy">Fácil</option>
+                    <option value="difficult">Difícil</option>
+                </select>
+                <label>Número de preguntas: </label>
+                <input type="number" min="5" max="50" step="1" placeholder="5" id="userNum">
+
+                <button id="getQuestions" onclick="getQuestionsAndBegin()">LETS BEGIN!</button>
+
+            </section>
             <section id="progressWrapper">
                 <!-- INSERTAR NUMEROS DE BARRA DE PROGRESO AQUI -->
             </section>
             <section class="acordeon">
-
                     <!-- INTERTAR PREGUNTAS DEL  DOM  AQUI -->
             </section>
             <div id="divButton">
@@ -22,5 +34,5 @@
             </div>
         </main>
     </body>
-    <script src="scripts.js"></script>
+    <script src="/scripts.js"></script>
 </html>
