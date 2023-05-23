@@ -89,20 +89,6 @@ display: flex;
 flex-direction: column;
 align-items: center;
 }
-.progress{
-  height: 1.5em;
-  width: 1.5em;
-  background-color: rgb(241, 239, 235);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  border: solid #67adb5 ;
-  font-family: Aleo;
-  padding-top: 1.5px;
-  font-weight: bolder;
-  color: rgb(22, 90, 74);
-}
 #progressWrapper{
   margin-top: 4.5em;
   display: flex;
@@ -110,6 +96,35 @@ align-items: center;
   flex-wrap: nowrap;
   justify-content: space-evenly;
 }
+.progressBef{
+  height: 1.5em;
+  width: 1.5em;
+  background-color: rgb(241, 239, 235);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: solid 4px #67adb5 ;
+  font-family: Aleo;
+  padding-top: 1.5px;
+  font-weight: bolder;
+  color: rgb(22, 90, 74);
+}
+.progressAft{
+  height: 1.5em;
+  width: 1.5em;
+  background-color:rgb(22, 90, 74);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: solid 4px #67adb5 ;
+  font-family: Aleo;
+  padding-top: 1.5px;
+  font-weight: bolder;
+  color: rgb(241, 239, 235);
+}
+
 
 
 
