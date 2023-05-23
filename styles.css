@@ -148,7 +148,7 @@ align-items: center;
 
 
 /* BUTTONS */
-#button{
+.button{
   width: 38%;
   height: 3.2em;
   margin-top: 2em;
@@ -159,7 +159,7 @@ align-items: center;
   color: rgb(239, 220, 196);
   border-radius: 5% / 5%;
 }
-#button:hover{
+.button:hover{
   box-shadow: 0 0px 13px 3px rgb(84, 82, 82);
   background-color: rgb(25, 117, 117)
 }

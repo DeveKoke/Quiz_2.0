@@ -47,40 +47,85 @@ let questionsInfo = [{
 }
 ]
 
+function createCongratsCard(score){
+    let finalQuizMessages = [{
+        title: "Congratulations!",
+        message: "You are practically an architect!",
+        score: 9
+    },{
+        title: "Well done!",
+        message: "You seem to like it!",
+        score: 7
+    },{
+        title: "You have passed the test!",
+        message: "Just what everyone knows.",
+        score: 5
+    },{
+        title: "Not good enough...",
+        message: "Obviously, it's not your favorite topic...",
+        score: 3
+    },{
+        title: "Really?!",
+        message: "Come on! You haven't even tried!",
+        score: 0
+    }]
+
+    let index;
+    for (let i=0; i<finalQuizMessages.length; i++){
+        if(score >= finalQuizMessages[i].score){
+            index = i;
+            break;
+        }
+    }
+
+    let title = finalQuizMessages[index].title;
+    let message = finalQuizMessages[index].message;
+    let congratsCard = `<article id="congrats_card" class="question_card">
+        <h3>${title}</h3>
+        <p>${message}</p>
+        <p>${score}/${totalPoints}</p>
+        <button onclick="showAnswers()">Check answers</button>
+    </article>`
+    acordeon.innerHTML += congratsCard;
+}
+
+
+
+
 // Create question cards:
     //Instead of creating every card at first, we can "fetch" all de questions and create the cards one at a time. In the end, we show every card.
     //when you click a button ("comenzar" and "siguiente"), the function "createQuestionCards" executes itself and it creates one card. When it's answered 
     //the card is stored and hidden, and its prepared to repeat the process.
 let quesIndex = 0;
 let quesNum = quesIndex + 1;
-let correctAnsId;
-let correctAnsIdColection = [];
+
+let correctAnsCollection = {};
+let userAnsCollection = {};
 
 //"Next" button: if you have not answered the question you can't get the next one.
 function pressNextButton(){
     if (quesIndex == 0){
         createQuestionCards(questionsInfo);
-    } else if (correctAnsIdColection.length < quesIndex){
-        // This could be a Sweet Alert!!
-        let alertMessage = `<article class="alertCard">
-            <h3>Stop right there!</h3>
-            <p>You are missing something... You haven't answered this question!</p>
-        </article>`
-        acordeon.innerHTML += alertMessage;
-    } else if (quesIndex == questionsInfo.length-1){
-        let allCards = document.querySelectorAll(".question_card");
-        allCards.forEach(item => item.classList.remove("hideCard"));
-        checkAnswers(questionsArr)
+    } else if ( false ){
+        //Sweet Alert!!
+        //Stop right there! You are missing something... You haven't answered this question!
     } else {
-        //Hide the previous card and go on with the next one
+        //Hide the previous card and go on with the next one 
         let currentCard = document.querySelector(`#question_card_${quesNum}`);
         currentCard.classList.add("hideCard");
         createQuestionCards(questionsInfo);
+        if (quesIndex == questionsInfo.length){
+            document.querySelector(".button").classList.add("hideCard");
+            let divButton = document.querySelector("#divButton");
+            divButton.innerHTML += '<button id="endQuiz" onclick="checkAnswers()" class="button">Finalizar Quiz</button>';
+            acordeon.appendChild(divButton);
+        }
     }
 }
 
 
 function createQuestionCards(questionsInfo){
+    let correctAnsId;
     let questionObject = questionsInfo[quesIndex];
     let {question, correctAnswer, wrongAnswers} = questionObject;
     quesNum = quesIndex + 1;
@@ -90,86 +135,79 @@ function createQuestionCards(questionsInfo){
     answers.splice(correctAnsIndex, 0, correctAnswer);
 
     let questionCard = `<article id="question_card_${quesNum}" class="question_card">
-                            <h3>${quesNum}. ${question}</h3>
-                            <div class="radio_div">
-                                <input type="radio" id="answer${quesNum}-0" name="ansQuest${quesNum}" value="${answers[0]}"><label for="answer${quesNum}-0">${answers[0]}</label>
-                                <input type="radio" id="answer${quesNum}-1" name="ansQuest${quesNum}" value="${answers[1]}"><label for="answer${quesNum}-1">${answers[1]}</label>
-                                <input type="radio" id="answer${quesNum}-2" name="ansQuest${quesNum}" value="${answers[2]}"><label for="answer${quesNum}-2">${answers[2]}</label>
-                                <input type="radio" id="answer${quesNum}-3" name="ansQuest${quesNum}" value="${answers[3]}"><label for="answer${quesNum}-3">${answers[3]}</label>
-                            </div>
-                        </article>`
-    quizForm.innerHTML += questionCard;
+        <h3>${quesNum}. ${question}</h3>
+        <div class="radio_div">
+            <button id="answer${quesNum}-0" class="question${quesNum}" onclick="markAnswer('question${quesNum}', '${answers[0]}', 'answer${quesNum}-0')" value="${answers[0]}">${answers[0]}</button>
+            <button id="answer${quesNum}-1" class="question${quesNum}" onclick="markAnswer('question${quesNum}', '${answers[1]}', 'answer${quesNum}-1')" value="${answers[1]}">${answers[1]}</button>
+            <button id="answer${quesNum}-2" class="question${quesNum}" onclick="markAnswer('question${quesNum}', '${answers[2]}', 'answer${quesNum}-2')" value="${answers[2]}">${answers[2]}</button>
+            <button id="answer${quesNum}-3" class="question${quesNum}" onclick="markAnswer('question${quesNum}', '${answers[3]}', 'answer${quesNum}-3')" value="${answers[3]}">${answers[3]}</button>
+        </div>
+    </article>`
+    acordeon.innerHTML += questionCard;
 
     correctAnsId = `answer${quesNum}-${correctAnsIndex}`;
-    correctAnsIdColection.push(correctAnsId);
+    correctAnsCollection[`question${quesNum}`] = {"answer": answers[correctAnsIndex], "id": correctAnsId};
     quesIndex++;
-    console.log(quesIndex)
+
 }
 
-//Input submit general
-quizForm.innerHTML += '<input type="submit" id="submit" value="Send"><label for="submit">Enviar respuestas</label>';
+// Mark the answer
+function markAnswer(questionNum, userAnswer, answerID){ //MEJOR CON BOTONES!!
+    userAnsCollection[questionNum] = {"answer": userAnswer, "id": answerID};
+    console.log(userAnsCollection)
+}
+/* // Mark the answer
+function markAnswer(event){ //MEJOR CON BOTONES!!
+    let questionNum = event.target.class;
+    let userAnswer = event.target.value;
+    let answerID = event.target.id;
 
-// Check the answers
-function checkAnswers(questionsArr){
-    let userAnswers = quizForm.querySelectorAll('input[type="radio"]:checked');
-    console.log(userAnswers)
-    let correctAnswers = questionsArr.map(item => item.correctAnswer);
-    let totalPoints = correctAnswers.length;
+    userAnsCollection[questionNum] = {"answer": userAnswer, "id": answerID};
+    console.log(userAnsCollection)
+} */
+
+
+
+// Check answers
+function checkAnswers(){
     let score = 0;
+    let questionNumbersArr = Object.keys(correctAnsCollection);
+    console.log(questionNumbersArr.length)
 
-    //Colour answers:
-    for(let i=0; i<correctAnswers.length; i++){
-        if(correctAnswers[i]==userAnswers[i].value){
+    let allCards = document.querySelectorAll(".question_card");
+    allCards.forEach(item => item.classList.remove("hideCard"));
+
+    for(let i=0; i<questionNumbersArr.length; i++){
+        let correctAnswer = correctAnsCollection[questionNumbersArr[i]].answer
+        let correctId = correctAnsCollection[questionNumbersArr[i]].id
+
+        let userAnswer = userAnsCollection[questionNumbersArr[i]].answer
+        let userId = userAnsCollection[questionNumbersArr[i]].id
+
+        console.log(correctAnswer, correctId)
+        console.log(userAnswer, userId)
+
+        if(correctAnswer == userAnswer){
             score++;
-            let correctAnsLabel = document.querySelector(`label[for="${correctAnsIdColection[i]}"]`);
-            correctAnsLabel.style.background = "green";
+            let correctAnsButton = document.querySelector(`#${correctId}`);
+            correctAnsButton.style.background = "green";
         } else {
-            let correctAnsLabel = document.querySelector(`label[for="${correctAnsIdColection[i]}"]`);
-            correctAnsLabel.style.background = "green";
-            let incorrectAnsLabel = document.querySelector(`label[for="${userAnswers[i].id}"]`);
-            incorrectAnsLabel.style.background = "red";
+            let correctAnsButton = document.querySelector(`#${correctId}`);
+            correctAnsButton.style.background = "green";
+            let incorrectAnsButton = document.querySelector(`#${userId}`);
+            incorrectAnsButton.style.background = "red";
         }
     }
-
-    // Congratulations card:
-        
-        let finalQuizMessages = [{
-            title: "Congratulations!",
-            message: "You are practically an architect!",
-            score: 9
-        },{
-            title: "Well done!",
-            message: "You seem to like it!",
-            score: 7
-        },{
-            title: "You have passed the test!",
-            message: "Just what everyone knows.",
-            score: 5
-        },{
-            title: "Not good enough...",
-            message: "Obviously, it's not your favorite topic...",
-            score: 3
-        },{
-            title: "Really?!",
-            message: "Come on! You haven't even tried!",
-            score: 0
-        }]
-    
-        let index;
-        for (let i=0; i<finalQuizMessages.length; i++){
-            if(score >= finalQuizMessages[i].score){
-                index = i;
-                break;
-            }
-        }
-    
-        let title = finalQuizMessages[index].title;
-        let message = finalQuizMessages[index].message;
-        let congratsCard = `<article id="congrats_card" class="question_card">
-            <h3>${title}</h3>
-            <p>${message}</p>
-            <p>${score}/${totalPoints}</p>
-            <button onclick="showAnswers()">Check answers</button>
-        </article>`
-        acordeon.innerHTML += congratsCard;
+    return score;
 }
+
+
+
+
+
+
+    
+
+
+
+
