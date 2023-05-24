@@ -13,8 +13,6 @@
   --main-lightgreen-color: rgb(33, 128, 128);
 }
 
-
-
 /* TAGS */
 body{
   margin: 0;
@@ -110,6 +108,16 @@ background-position: top;
   margin: 7em auto;
   width: 35%;
 }
+.kindWrapper{
+  background-color: var(--main-whitebone-color);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .8em 1em 1.2em;
+  margin: 7em auto;
+  width: 35%;
+}
 #divButton{
 display: flex;
 flex-direction: column;
@@ -122,6 +130,7 @@ align-items: center;
   flex-wrap: nowrap;
   justify-content: space-evenly;
 }
+
 .progressBef{
   height: 1.5em;
   width: 1.5em;
