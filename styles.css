@@ -3,6 +3,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Caesar+Dressing&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Aleo:wght@300;400;700&display=swap');
 
+:root {
+  --main-white-color:rgb(241, 239, 235);
+  --main-whitebone-color: rgb(243, 238, 222);
+  --main-beige-color: rgb(239, 220, 196);
+  --main-brown-color: rgb(111, 65, 65);
+  --main-teal-color: #67adb5 ;
+  --main-darkgreen-color: rgb(22, 90, 74);
+  --main-lightgreen-color: rgb(33, 128, 128);
+}
 
 /* TAGS */
 
@@ -86,6 +95,16 @@ background-position: top;
   padding: .1em .6em;
   margin: 0% 3%;
 }
+.kindWrapper{
+  background-color: var(--main-whitebone-color);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .8em 1em 1.2em;
+  margin: 7em auto;
+  width: 35%;
+}
 #divButton{
 display: flex;
 flex-direction: column;
@@ -98,6 +117,7 @@ align-items: center;
   flex-wrap: nowrap;
   justify-content: space-evenly;
 }
+
 .progressBef{
   height: 1.5em;
   width: 1.5em;
