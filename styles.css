@@ -3,31 +3,41 @@
 @import url('https://fonts.googleapis.com/css2?family=Caesar+Dressing&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Aleo:wght@300;400;700&display=swap');
 
+:root {
+  --main-white-color:rgb(241, 239, 235);
+  --main-whitebone-color: rgb(243, 238, 222);
+  --main-beige-color: rgb(239, 220, 196);
+  --main-brown-color: rgb(111, 65, 65);
+  --main-teal-color: #67adb5 ;
+  --main-darkgreen-color: rgb(22, 90, 74);
+  --main-lightgreen-color: rgb(33, 128, 128);
+}
+
+
 
 /* TAGS */
-
 body{
   margin: 0;
-  background-color: rgb(239, 220, 196);
+  background-color: var(--main-beige-color);
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 header{
-  background-color: white;
+  background-color: var(--main-white-color);
   width: 90%;
   margin: 1em auto 0;
   padding: .4em 0em;
   border-radius: 10px;
   position: relative;
-  border: solid 4px rgb(111, 65, 65);
+  border: solid 4px var(--main-brown-color);
 }
 h1{
   text-align: center;
   font-family: Caesar Dressing;
   font-size: 2.5em;
   letter-spacing: 10px;
-  margin-bottom: 15px;
+  margin: 15px 0px;
 }
 h2{
   font-family: Aleo;
@@ -37,7 +47,7 @@ main{
 background-image: url('assets/fondoMain.jpg') ;
 background-repeat: no-repeat;
 background-size: 135%;
-padding: 1em .4em 1em;
+padding: 1em .4em 0em;
 flex-grow: 1;
 }
 p{
@@ -50,41 +60,55 @@ label{
 }
 footer{
   background: linear-gradient(180deg, rgb(33, 128, 128) 0%, rgb(22, 90, 74) 100%);
-  color: rgb(243, 238, 222);
+  color: var(--main-white-color);
+  margin-top: 1em;
   padding: .2em 0em .5em;
-  position: fixed;
+  /* position: fixed; */
   left: 0;
   bottom: 0;
   width: 100%;
 }
 input[type=number]{
-  width: 5em;
+  width: 4em;
+  height: 1.2em;
+  font-size: 1.2em;
 }
 select{
-  width: 2em;
+  width: 8em;
+  height: 2em;
+  font-size: 1.1em;
 }
+
 
 
 
 /* DIV CONTAINERS */
 .main_bis{
 margin-top: -2.6em;
-background-size: 145%;
+background-size: 200%;
 background-position: top;
-
 }
 #encabezado{
-  background-color: rgb(243, 238, 222);
+  background-color: var(--main-whitebone-color);
   border-radius:10px;
   text-align: center;
   padding: .5em .2em;
-  margin: 0% 3% 3%
 }
 .frontWrapper{
-  background-color: rgb(243, 238, 222);
+  background-color: var(--main-whitebone-color);
   border-radius: 10px;
-  padding: .1em .6em;
-  margin: 0% 3%;
+  padding: .6em 1em;
+  margin: 3% 3% ;
+}
+.kindWrapper{
+  background-color: var(--main-whitebone-color);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .8em 1em 1.2em;
+  margin: 7em auto;
+  width: 35%;
 }
 #divButton{
 display: flex;
@@ -101,12 +125,12 @@ align-items: center;
 .progressBef{
   height: 1.5em;
   width: 1.5em;
-  background-color: rgb(241, 239, 235);
+  background-color: var(--main-white-color);
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  border: solid 4px #67adb5 ;
+  border: solid 4px var(--main-teal-color) ;
   font-family: Aleo;
   padding-top: 1.5px;
   font-weight: bolder;
@@ -120,7 +144,7 @@ align-items: center;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  border: solid 4px #67adb5 ;
+  border: solid 4px var(--main-teal-color) ;
   font-family: Aleo;
   padding-top: 1.5px;
   font-weight: bolder;
@@ -131,7 +155,7 @@ align-items: center;
 
 
 /* BQUESTION BOX ANIMATION */
-/* .acordeon {
+.acordeon {
     width: 88%;
     height: 47em;
     padding: 2.5em 0em;
@@ -165,10 +189,18 @@ align-items: center;
       box-shadow: 1px 1px .1em #67adb5;
       background-color: #bde6fc;
       color: white;
-    }  */
-
+    } 
 .question_card{
-    background-color: #67adb5;
+    background-color: var(--main-teal-color);
+    height: 100%;
+    margin-bottom: 1em;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.radio_div{
+  display: flex;
 }
 
 
@@ -181,7 +213,7 @@ align-items: center;
   font-weight: bolder;
   font-size: medium;
   letter-spacing: 3px;
-  background-color: rgb(111, 65, 65);
+  background-color: var(--main-brown-color);
   color: rgb(239, 220, 196);
   border-radius: 10px;
   letter-spacing: 7px;
@@ -191,6 +223,9 @@ align-items: center;
   background-color: rgb(25, 117, 117);
   cursor: pointer;
 }
+.answerButton{
+
+}
 
 
 
@@ -199,4 +234,67 @@ align-items: center;
 
 .hideCard{
     display: none;
+}
+
+
+/* *MEDIA QUERYS */
+@media screen and (min-width: 760px){
+  .button{
+    width: 45%;
+    font-size: 1.2em;
+  }
+  p, label{
+    font-size: 1.1em;
+  }
+  .frontWrapper{
+    margin: 1.5%;
+  }
+}
+@media screen and (min-width: 1000px){
+  .frontWrapper{
+    width: 85%;
+    margin: 1em auto;
+    padding: 0.7em 2em;
+  }
+  #encabezado{
+    width: 75%;
+  }
+  header{
+    width: 77%;
+    height: 5em;
+    padding-top: .6em;
+  }
+  .kindWrapper{
+    width: 28%;
+  }
+  .main_bis{
+    margin-top: -2.6em;
+    background-size: 120%;
+    background-position: top;
+    }
+}
+@media screen and (min-width: 1200px){
+  .frontWrapper{
+    width: 78%;
+    margin: 1em auto;
+    padding: 0.7em 2em;
+  }
+  #encabezado{
+    width: 67%;
+  }
+  p{
+    font-size: 1.3em;
+  }
+  h1{
+    font-size: 2.7em;
+  }
+  .button{
+    width: 33%;
+    font-size: 1.3em;
+  }
+  .main_bis{
+    margin-top: -2.6em;
+    background-size: 100%;
+    background-position: top;
+    }
 }

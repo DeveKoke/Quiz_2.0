@@ -4,12 +4,24 @@
         <title> QUIZTORIA - preguntas </title>
         <meta charset="utf-8">
         <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="sweetalert2.min.css">
     </head>
     <body >
         <header>
             <h1>QUIZTORIA</h1>
         </header>
         <main class="main_bis">
+            <section class="kindWrapper">
+                <label>Elige dificultad: </label>
+                <select name="difficulty" id="difficulty" >
+                    <option value=""> ---</option>
+                    <option value="easy">Fácil</option>
+                    <option value="medium">Difícil</option>
+                </select>
+                <label>Número de preguntas: </label>
+                <input type="number" min="5" max="50" step="1" placeholder="5" id="userNum">
+            </section>
+
             <section id="progressWrapper">
                 <!-- INSERTAR NUMEROS DE BARRA DE PROGRESO AQUI -->
             </section>
@@ -21,6 +33,13 @@
                 <button class="button" onclick="pressNextButton()"> SIGUIENTE </button>
             </div>
         </main>
+        <footer>
+            <p>Copyright (c) 2023   Jorge & Jorge  
+            All Rights Reserved</p> 
+            <p>This product is protected by copyright and distributed under
+            licenses restricting copying, distribution.</p>
+        </footer>
     </body>
     <script src="scripts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </html>

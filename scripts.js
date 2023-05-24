@@ -114,7 +114,28 @@ function pressNextButton(){
     } else if (userChoices != pressedNext){
         //Sweet Alert!!
         //Stop right there! You are missing something... You haven't answered this question!
-        console.log("Stop right there! You are missing something... You haven't answered this question!");
+        Swal.fire({
+            title: '¡No tan rápido, Napoleón! ',
+            text: "Debes responder todas las preguntas.",
+            icon: 'warning',
+            imageUrl: 'https://s2.abcstatics.com/media/historia/2019/03/09/napoleon-bonaparte-kwYB--1248x698@abc.jpg',
+            imageWidth: 400,
+            imageHeight: 200,
+            imageAlt: 'Custom image',
+            // showCancelButton: true,
+            confirmButtonColor: 'rgb(111, 65, 65)',
+            // cancelButtonColor: '#d33',
+            confirmButtonText: 'OK'
+          })
+        //   .then((result) => {
+        //     if (result.isConfirmed) {
+        //       Swal.fire(
+        //         'Deleted!',
+        //         'Your file has been deleted.',
+        //         'success'
+        //       )
+        //     }
+        //   })
         pressedNext--;
     } else {
         //Hide the previous card and go on with the next one 
@@ -144,10 +165,10 @@ function createQuestionCards(questionsInfo){
     let questionCard = `<article id="question_card_${quesNum}" class="question_card">
         <h3>${quesNum}. ${question}</h3>
         <div class="radio_div">
-            <button id="answer${quesNum}-0" class="question${quesNum}" onclick="markAnswer('question${quesNum}', '${answers[0]}', 'answer${quesNum}-0')">${answers[0]}</button>
-            <button id="answer${quesNum}-1" class="question${quesNum}" onclick="markAnswer('question${quesNum}', '${answers[1]}', 'answer${quesNum}-1')">${answers[1]}</button>
-            <button id="answer${quesNum}-2" class="question${quesNum}" onclick="markAnswer('question${quesNum}', '${answers[2]}', 'answer${quesNum}-2')">${answers[2]}</button>
-            <button id="answer${quesNum}-3" class="question${quesNum}" onclick="markAnswer('question${quesNum}', '${answers[3]}', 'answer${quesNum}-3')">${answers[3]}</button>
+            <button id="answer${quesNum}-0" class="answerButton" onclick="markAnswer('question${quesNum}', '${answers[0]}', 'answer${quesNum}-0')">${answers[0]}</button>
+            <button id="answer${quesNum}-1" class="answerButton" onclick="markAnswer('question${quesNum}', '${answers[1]}', 'answer${quesNum}-1')">${answers[1]}</button>
+            <button id="answer${quesNum}-2" class="answerButton" onclick="markAnswer('question${quesNum}', '${answers[2]}', 'answer${quesNum}-2')">${answers[2]}</button>
+            <button id="answer${quesNum}-3" class="answerButton" onclick="markAnswer('question${quesNum}', '${answers[3]}', 'answer${quesNum}-3')">${answers[3]}</button>
         </div>
     </article>`
     acordeon.innerHTML += questionCard;
@@ -228,7 +249,7 @@ startButton.addEventListener('click', function() {
 //* función para seleccionar preguntas random desde la API
 async function getRandomQuestions() { 
     let randomQuestions = [];          //* Array donde van las preguntas random con las que va a jugar user.
-    const difficulty = document.getElementById('difficulty').value   //*  input user para elegir dificultad.
+    let difficulty = document.getElementById('difficulty').value   //*  input user para elegir dificultad.
 
     try{    
         let response = await fetch(`https://opentdb.com/api.php?amount=50&category=23&difficulty=${difficulty}&type=multiple`);
