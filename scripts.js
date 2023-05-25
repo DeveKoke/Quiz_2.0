@@ -87,13 +87,24 @@ function localStorageLength(name){
     return total
 }
 
+function readAllLocalStorage(){
+    for (let i = 0; i < localStorage.length; i++){
+        let key = localStorage.key(i);
+        alert(`${key}: ${localStorage.getItem(key)}`);
+    }
+}
 
 
 
-// Create question cards:
+
+
+
+// Initialize variables:
+let gameName = "game5"
+let score = 0;
+
 let quesIndex = 0;
 let quesNum = quesIndex + 1;
-let gameName = "game5"
 
 let pressedNext = -1;
 let correctAnsCollection = {};
@@ -175,7 +186,6 @@ function createQuestionCards(questionsInfo){
     let answers = incorrect_answers;
     answers.splice(correctAnsIndex, 0, correct_answer);
 
-    // Los botenes tienen
     let questionCard = `<article id="question_card_${quesNum}" class="question_card">
         <h3>${quesNum}. ${question}</h3>
         <div class="radio_div">
@@ -201,13 +211,14 @@ function markAnswer(questionNum, userAnswer, answerID){
 
 // Check answers
 function checkAnswers(){
-    let score = 0;
+
     let questionNumbersArr = Object.keys(correctAnsCollection);
 
     let allCards = document.querySelectorAll(".question_card");
     allCards.forEach(item => item.classList.remove("hideCard"));
 
     for(let i=0; i<questionNumbersArr.length; i++){
+        i;
         let correct_answer = correctAnsCollection[questionNumbersArr[i]].answer
         let correctId = correctAnsCollection[questionNumbersArr[i]].id
 
