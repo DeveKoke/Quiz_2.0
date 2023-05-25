@@ -67,7 +67,7 @@ async function getQuestionsAndBegin(){
 }
 
 
-    
+// Local Storage functions
 function saveInLocalStorage(item, name){
     let arr = [];
     for(let i in item){
@@ -87,19 +87,49 @@ function localStorageLength(name){
     return total
 }
 
+function readAllLocalStorage(){
+    for (let i = 0; i < localStorage.length; i++){
+        let key = localStorage.key(i);
+        alert(`${key}: ${localStorage.getItem(key)}`);
+    }
+}
 
 
 
-// Create question cards:
+
+
+
+// Initialize variables:
+let gameName = "game5"
+let score = 0;
+
 let quesIndex = 0;
 let quesNum = quesIndex + 1;
-let gameName = "game5"
 
 let pressedNext = -1;
 let correctAnsCollection = {};
 let userAnsCollection = {};
 
-//"Next" button: if you have not answered the question you can't get the next one.
+
+// Función para pintar los números de la barra de progreso:
+function numBar(numberQuest) {
+    for (let i = 1; i <= numberQuest; i++) {
+        let spanBar = `<span id="sp${i}" class="progressBef">${i}</span>`  
+        let progressBar = document.getElementById('progressWrapper');
+        progressBar.innerHTML += spanBar;     //TODO si no salen todas, usar un appendChild()
+    }
+}
+
+// función para cambiar color de span según el progreso
+function changeSpanBar() {
+    let spanNum = document.getElementById(`sp${quesIndex}`);
+    spanNum.classList.remove('progressBef');
+    spanNum.classList.add('progressAft'); //* comprobar si valdría solo con añadir la clase que contenga en CSS el cambio de background en vez de quitar una y poner otra.
+}
+
+
+
+// Function that manage what happens when you press "Next" button:
 async function pressNextButton(){
     let userChoices = Object.keys(userAnsCollection).length;
     pressedNext++;
@@ -107,6 +137,9 @@ async function pressNextButton(){
         await getQuestionsAndBegin().then(item => saveInLocalStorage(item, gameName));
         let questionFromLocalStorage = getLocalStorageQuestion(gameName, quesIndex);
         createQuestionCards(questionFromLocalStorage);
+
+        let numberOfQuestions = localStorageLength(gameName);
+        numBar(numberOfQuestions);
 
     } else if (userChoices != pressedNext){
         //Sweet Alert!!
@@ -126,9 +159,10 @@ async function pressNextButton(){
     } else {
         //Hide the previous card and go on with the next one 
         let numberOfQuestions = localStorageLength(gameName);
-
+        
         let currentCard = document.querySelector(`#question_card_${quesNum}`);
         currentCard.classList.add("hideCard");
+        changeSpanBar();
 
         let questionFromLocalStorage = getLocalStorageQuestion(gameName, quesIndex);
         createQuestionCards(questionFromLocalStorage);
@@ -152,7 +186,6 @@ function createQuestionCards(questionsInfo){
     let answers = incorrect_answers;
     answers.splice(correctAnsIndex, 0, correct_answer);
 
-    // Los botenes tienen
     let questionCard = `<article id="question_card_${quesNum}" class="question_card">
         <h3>${quesNum}. ${question}</h3>
         <div class="radio_div">
@@ -169,8 +202,6 @@ function createQuestionCards(questionsInfo){
     quesIndex++;
 }
 
-
-
 // Mark the answer
 function markAnswer(questionNum, userAnswer, answerID){ 
     userAnsCollection[questionNum] = {"answer": userAnswer, "id": answerID};
@@ -180,13 +211,14 @@ function markAnswer(questionNum, userAnswer, answerID){
 
 // Check answers
 function checkAnswers(){
-    let score = 0;
+
     let questionNumbersArr = Object.keys(correctAnsCollection);
 
     let allCards = document.querySelectorAll(".question_card");
     allCards.forEach(item => item.classList.remove("hideCard"));
 
     for(let i=0; i<questionNumbersArr.length; i++){
+        i;
         let correct_answer = correctAnsCollection[questionNumbersArr[i]].answer
         let correctId = correctAnsCollection[questionNumbersArr[i]].id
 
@@ -209,38 +241,3 @@ function checkAnswers(){
 
 
 
-// Función para pintar los números de la barra de progreso
-async function numBar (numberQuest) {
-    try{
-        let numBar = numberQuest(getRandomQuestions());
-        for (let i = 1; i <= numBar; i++) {
-            const spanBar = `<span id="sp${i}" class="progressBef">${i}</span>`  
-            const progressBar = document.getElementById('progressWrapper');
-            progressBar.innerHTML += spanBar;     //TODO si no salen todas, usar un appendChild()
-        }
-    }
-    catch (error){
-        console.log('error')
-    }
-}
-
-
-
-// función para cambiar color de span según el progreso
-function changeSpanBar() {
-    const spanNum = document.getElementById(`sp${quesIndex+1}`);
-    spanNum.classList.remove('progressBef');
-    spanNum.classList.add('progressAft'); //* comprobar si valdría solo con añadir la clase que contenga en CSS el cambio de background en vez de quitar una y poner otra.
-
-}
-
-
-
-
-/* 
-// Cambio a main.HTML al hacer clic en botón COMENZAR ----> IMPORTANTE, TRAE PROBLEMAS: TIENE QUE IR AL FINAL DEL SCRIPT
-const startButton = document.getElementById('startButton');
-startButton.addEventListener('click', function(){
-    // window.location.href = 'main.html';
-});
- */
