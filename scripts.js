@@ -1,7 +1,7 @@
 
 
 let quizForm = document.querySelector(".quizForm"); 
-let acordeon = document.querySelector(".acordeon");
+let acordeon = document.querySelector("#acordeon");
 
 
 function createCongratsCard(score){
@@ -178,13 +178,49 @@ function markAnswer(questionNum, userAnswer, answerID){
 
 
 
+
+
+
+function hideButtons() {
+
+    let buttonsDiv = document.getElementsByClassName('radio_div');
+    console.log(buttonsDiv);
+    for (let i = 0; i < buttonsDiv.length; i++) {
+        buttonsDiv[i].classList.add("visibility_hidden");
+    }
+
+
+//     let allCards = document.querySelectorAll(".question_card");
+//    for (let i = 0; i < allCards.length; i++) {
+    
+//        allCards[i].addEventListener('click', ()=> {
+//            buttonsDiv[i].classList.remove})
+       
+    
+//    }
+ 
+        
+    };
+    
+
+
+
+
+
+
 // Check answers
 function checkAnswers(){
     let score = 0;
     let questionNumbersArr = Object.keys(correctAnsCollection);
 
+
     let allCards = document.querySelectorAll(".question_card");
     allCards.forEach(item => item.classList.remove("hideCard"));
+    acordeon.setAttribute('class','acordeon');
+    
+    hideButtons();
+    
+
 
     for(let i=0; i<questionNumbersArr.length; i++){
         let correct_answer = correctAnsCollection[questionNumbersArr[i]].answer
