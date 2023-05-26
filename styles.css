@@ -6,7 +6,7 @@
 :root {
   --main-white-color:rgb(241, 239, 235);
   --main-whitebone-color: rgb(243, 238, 222);
-  --main-beige-color: rgb(239, 220, 196);
+  --main-beige-color: rgb(232, 209, 180);
   --main-brown-color: rgb(111, 65, 65);
   --main-teal-color: #67adb5 ;
   --main-darkgreen-color: rgb(22, 90, 74);
@@ -26,7 +26,7 @@ body{
 }
 header{
   background-color: var(--main-white-color);
-  width: 90%;
+  width: 95%;
   margin: 1em auto 0;
   padding: .4em 0em;
   border-radius: 10px;
@@ -43,6 +43,7 @@ h1{
 h2{
   font-family: Aleo;
   margin: 5px auto;
+
 }
 h3{
   margin: 4%  auto 1%;
@@ -74,6 +75,9 @@ select{
   width: 8em;
   height: 2em;
   font-size: 1.1em;
+}
+a{
+  text-decoration: none;
 }
 
 
@@ -120,7 +124,18 @@ margin: 0;
   align-items: center;
   padding: .8em 1em 1.2em;
   margin: 7em auto;
-  width: 35%;
+  width: 75%;
+}
+.kindWrapper{
+  background-color: var(--main-whitebone-color);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .8em 1em 1.2em;
+  margin: 7em auto;
+  width: 75%;
+  font-size: 1.07em;
 }
 #divButton{
   display: flex;
@@ -129,12 +144,18 @@ margin: 0;
 }
 #progressWrapper{
   margin-top: 4.5em;
-  display: flex;
+  display: none;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: space-evenly;
+  background-color: var(--main-beige-color);
+  padding: 1em .5em;
+  border-radius: 15px;
+  width: 93%;
+  margin: 2em auto;
 }
 .progressBef{
+  margin:  0% .3% 1%;
   height: 1.5em;
   width: 1.5em;
   background-color: var(--main-white-color);
@@ -149,6 +170,7 @@ margin: 0;
   color: rgb(22, 90, 74);
 }
 .progressAft{
+  margin:  0% .3% 1%;
   height: 1.5em;
   width: 1.5em;
   background-color:rgb(22, 90, 74);
@@ -162,12 +184,27 @@ margin: 0;
   font-weight: bolder;
   color: rgb(241, 239, 235);
 }
+.results_container{
+  background-color: var(--main-whitebone-color);
+  width: 90%;
+  padding-top: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 15px;
+  margin-top: 2em;
+}
+.main_results{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 
 /* FORMATO CARDS */
 .question_card{
   background-color: var(--main-beige-color);
-  width: 97%;
+  width: 95%;
   height: 100%;
   margin: 0em auto 1em;
   padding-bottom: 2%;
@@ -270,6 +307,27 @@ border: solid var(--main-brown-color);
   background-color: rgb(25, 117, 117);
   cursor: pointer;
 }
+#nextButton{
+  display: none;
+}
+a:link{
+  color:var(--main-whitebone-color)
+}
+a:visited{
+color: var(--main-whitebone-color);
+}
+#getQuestions{
+  margin: 1.3em;
+  width: 60%;
+  height: 3.6em;
+  font-weight: bolder;
+  font-size: medium;
+  letter-spacing: 3px;
+  background-color: var(--main-brown-color);
+  color: rgb(239, 220, 196);
+  border-radius: 10px;
+  letter-spacing: 7px;
+}
 
 .correct_answer{
   background-color:  green;
@@ -305,6 +363,12 @@ border: solid var(--main-brown-color);
 
 
 /* *MEDIA QUERYS */
+@media screen and (max-width: 400px){
+.ct-chart-bar{
+  width: 300px;
+  height: 150px;
+}
+}
 @media screen and (min-width: 760px){
   .button{
     width: 45%;
@@ -316,8 +380,14 @@ border: solid var(--main-brown-color);
   .frontWrapper{
     margin: 1.5%;
   }
+  .kindWrapper{
+    width: 55%;
+  }
   .question_card{
     width: 87%;
+  }
+  #progressWrapper{
+    width: 85%;
   }
   .answerButton{
     font-size: 1em ;
@@ -337,6 +407,14 @@ border: solid var(--main-brown-color);
   flex-direction: row;
   flex-wrap: wrap;
 }
+#progressWrapper{
+  width: 85%;
+}
+.progressAft, .progressBef{
+  width: 1.9em;
+  height: 1.8em;
+  font-size: 1.1em;
+}
 }
 @media screen and (min-width: 1000px){
   .frontWrapper{
@@ -348,6 +426,9 @@ border: solid var(--main-brown-color);
     width: 75%;
     padding: 0.5em 0.2em 2.5em;
     margin-top: 3.3em;
+  }
+  #progressWrapper{
+    width: 77%;
   }
   header{
     width: 77%;
@@ -365,6 +446,11 @@ border: solid var(--main-brown-color);
     width: 48%;
     margin: 0.9% auto;
     height: 2.9em;
+  }
+  .progressAft, .progressBef{
+    width: 2.1em;
+    height: 2em;
+    font-size: 1.2em;
   }
   h3{
     font-size: 1.4em;
@@ -404,4 +490,34 @@ border: solid var(--main-brown-color);
     height: 3.1em;
     width: 43%;
   }
+}
+
+
+/* CHART FORMAT */
+svg{
+/* padding: 1em;
+margin: 2em; */
+background-color: var(--main-whitebone-color);
+
+width: 900px;
+height: 600px;
+}
+.ct-chart-bar{
+  width: 85%;
+  /* height: 85%; */
+}
+.ct-bar{
+  stroke-width: 7%;
+}
+
+.ct-series .ct-bar{
+  stroke: var(--main-lightgreen-color);
+  border: var(--main-darkgreen-color);
+
+}
+.ct-label{
+  color: var(--main-brown-color);
+  font-weight: bold;
+  font-size: 0.9rem;
+  font-family: Aleo;
 }

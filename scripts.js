@@ -281,6 +281,8 @@ function changeSpanBar() {
 // Function that manage what happens when you press "Next" button:
 async function pressNextButton(){
     let userChoices = Object.keys(userAnsCollection).length;
+    const nextButton = document.getElementById('nextButton');
+    const progressBar = document.getElementById('progressWrapper');
     pressedNext++;
     let numberOfQuestions = localStorageLength(newGameKey);
 
@@ -291,6 +293,10 @@ async function pressNextButton(){
         createQuestionCards(questionFromLocalStorage);
         numberOfQuestions = localStorageLength(newGameKey);
         numBar(numberOfQuestions);
+
+        nextButton.style.display = 'block';
+        progressBar.style.display = 'flex'
+
 
     } else if (userChoices != pressedNext){
         //Sweet Alert!!
@@ -314,12 +320,12 @@ async function pressNextButton(){
 
         let questionFromLocalStorage = getLocalStorageQuestion(newGameKey, quesIndex);
         createQuestionCards(questionFromLocalStorage);
-
-        if(quesIndex == numberOfQuestions){
-        document.querySelector(".button").classList.add("hideCard");
-        let divButton = document.querySelector("#divButton");
-        divButton.innerHTML += '<button id="endQuiz" onclick="checkAnswers()" class="button">Finalizar Quiz</button>';
-        acordeon.appendChild(divButton); 
+        
+        if (quesIndex == numberOfQuestions){
+            document.querySelector(".button").classList.add("hideCard");
+            let divButton = document.querySelector("#divButton");
+            divButton.innerHTML += '<button id="endQuiz" onclick="checkAnswers()" class="button"><a href="results.html">MY RESULTS</a></button>';
+            acordeon.appendChild(divButton); 
         }
     }
 }
@@ -424,5 +430,55 @@ function checkAnswers(){
 
 
 
+// *GRAFICO PUNTUACIONES.
+// let arrUserList = JSON.parse(localStorage.getItem('game5'));
+let arrUserList = [{
+    id: 1,
+    date: "05-04-2005",
+    score: 9
+},
+{
+    id: 1,
+    date: "06-08-2013",
+    score: 20
+},{
+    id: 1,
+    date: "04-06-2009",
+    score: 15
+},{
+    id: 1,
+    date: "2013-03-23",
+    score: 13
+},{
+    id: 1,
+    date: "2009-05-23",
+    score: 18
+}]
 
+let dateChart = [];
+let scoreChart = [];
+function chartScore (){
 
+    for (i = 0; i < arrUserList.length; i++) {
+        dateChart.push(arrUserList[i].date) ;  
+        scoreChart.push(arrUserList[i].score) ;
+    }
+
+    var data = {
+        // * eje x
+        labels: dateChart,
+        // * valores para el eje x
+        series: [
+            scoreChart
+        ]
+    };
+    //* dimensiones de gráfica.
+    var options = {};
+    // Create a new line chart object where as first parameter we pass in a selector
+    // that is resolving to our chart container element. The Second parameter
+    // is the actual data object. As a third parameter we pass in our custom options.
+    new Chartist.Bar('.ct-chart', data, options);
+  
+}
+console.log(chartScore);
+chartScore();
