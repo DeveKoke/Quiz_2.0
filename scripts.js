@@ -1,5 +1,67 @@
+// FIREBASE FIRESTORE
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyAKZ-KGDnv0hUzez3Kjya0QJuVmp75387Q",
+    authDomain: "quiz-2-14171.firebaseapp.com",
+    projectId: "quiz-2-14171",
+    storageBucket: "quiz-2-14171.appspot.com",
+    messagingSenderId: "338864848243",
+    appId: "1:338864848243:web:109afe970ab0a4515cd906"
+  };
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+//Add game to a user
+function addGameInfo(userName, gameId, gameInfo){
+    db.collection(userName).doc(gameId).set(gameInfo).then((docRef) => {
+    console.log("Document written with ID: ", docRef.id)
+    })
+    .catch((error) => console.error("Error adding document: ", error));
+};
+
+//Delete a game of a user
+function deleteGame(userName, gameId){
+    db.collection(userName).doc(gameId).delete().then(() => {
+      alert(`Documento ${gameId} ha sido borrado`);
+      //Read all again
+      readAll();
+    })
+      .catch(() => console.log('Error borrando documento'));
+  };
 
 
+
+  
+
+
+// Backend
+// -----------------------------------------------------------------------------------------------------------------------------------------------------
+// Frontend
+
+
+
+
+
+
+// Initialize variables:
+let userName = "Elena";
+let gameId = "game_1";
+let newGameKey = "new_game";
+
+let score = 0;
+let gameInfo;
+
+let quesIndex = 0;
+let quesNum = quesIndex + 1;
+
+let pressedNext = -1;
+let correctAnsCollection = {};
+let userAnsCollection = {};
+
+
+// Main elements
 let quizForm = document.querySelector(".quizForm"); 
 let acordeon = document.querySelector("#acordeon");
 
@@ -89,10 +151,14 @@ function getLocalStorageQuestion(name, index){
     return questions[index]
 }
 
-function localStorageLength(name){
+function localStorageLength(name){ //if undefined => length=0
     let questions = JSON.parse(localStorage.getItem(name));
-    let total = questions.length;
-    return total
+    if (questions){
+        let total = questions.length;
+        return total;
+    } else {
+        return 0;
+    }
 }
 
 function readAllLocalStorage(){
@@ -103,21 +169,6 @@ function readAllLocalStorage(){
 }
 
 
-
-
-
-
-// Initialize variables:
-let gameName = "game5"
-let score = 0;
-let gameInfo;
-
-let quesIndex = 0;
-let quesNum = quesIndex + 1;
-
-let pressedNext = -1;
-let correctAnsCollection = {};
-let userAnsCollection = {};
 
 
 // Función para pintar los números de la barra de progreso:
@@ -142,12 +193,14 @@ function changeSpanBar() {
 async function pressNextButton(){
     let userChoices = Object.keys(userAnsCollection).length;
     pressedNext++;
-    let numberOfQuestions = localStorageLength(gameName);
+    let numberOfQuestions = localStorageLength(newGameKey);
 
     if (quesIndex == 0){
-        await getQuestionsAndBegin().then(item => saveQuestionsInLocalStorage(item, gameName));
-        let questionFromLocalStorage = getLocalStorageQuestion(gameName, quesIndex);
+        
+        await getQuestionsAndBegin().then(item => saveQuestionsInLocalStorage(item, newGameKey));
+        let questionFromLocalStorage = getLocalStorageQuestion(newGameKey, quesIndex);
         createQuestionCards(questionFromLocalStorage);
+        numberOfQuestions = localStorageLength(newGameKey);
         numBar(numberOfQuestions);
 
     } else if (userChoices != pressedNext){
@@ -170,7 +223,7 @@ async function pressNextButton(){
         currentCard.classList.add("hideCard");
         changeSpanBar();
 
-        let questionFromLocalStorage = getLocalStorageQuestion(gameName, quesIndex);
+        let questionFromLocalStorage = getLocalStorageQuestion(newGameKey, quesIndex);
         createQuestionCards(questionFromLocalStorage);
 
         if(quesIndex == numberOfQuestions){
@@ -226,12 +279,14 @@ function acordeonFunctionality() {
 
 // Put the main game info in an object to store and print the graph
 function getGameInfo(score, numberOfQuestions){
-    let id = gameName;
+    let id = gameId;
     let date = new Date;
-    year = date.getFullYear();
-    month = date.getMonth();
-    day = date.getDay();
-    date = `${year}-${month}-${day}`;
+    let year = date.getFullYear();
+    let month = date.getMonth();
+    let day = date.getDay();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    date = `${year}-${month}-${day} (${hours}:${minutes})`;
     score = score*100/numberOfQuestions;
 
     gameInfo = {id, date, score};
@@ -267,8 +322,18 @@ function checkAnswers(){
     
     getGameInfo(score, numberOfQuestions);
     saveGameInLocalStorage(gameInfo, "gamesInfo");
+    addGameInfo(userName, gameId, gameInfo)
     acordeonFunctionality();
 }
+
+
+
+
+
+
+
+
+
 
 
 
