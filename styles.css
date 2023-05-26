@@ -279,6 +279,29 @@ border: solid var(--main-brown-color);
 }
 
 
+/* *Auth form -------------------------------------------------*/
+.auth_form {
+  background-color: var(--main-beige-color);
+  width: 97%;
+  height: 100%;
+  margin: 0em auto 1em;
+  padding-bottom: 2%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 15px;
+  font-family: Aleo;
+}
+#signup_form{
+  display: flex;
+  flex-direction: column;
+}
+#login_form{
+  display: flex;
+  flex-direction: column;
+}
+
+
 
 
 /* *MEDIA QUERYS */

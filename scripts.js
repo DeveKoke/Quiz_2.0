@@ -21,19 +21,108 @@ function addGameInfo(userName, gameId, gameInfo){
     .catch((error) => console.error("Error adding document: ", error));
 };
 
-//Delete a game of a user
-function deleteGame(userName, gameId){
-    db.collection(userName).doc(gameId).delete().then(() => {
-      alert(`Documento ${gameId} ha sido borrado`);
-      //Read all again
-      readAll();
+
+
+// FIREBASE AUTH
+//Initialize Auth
+const auth = firebase.auth();
+const user = auth.currentUser;
+
+//Initialize cloudstore
+//---------------const storage = getStorage();
+
+let signUpForm = document.getElementById("signup_form");
+let logInForm = document.getElementById("login_form");
+let logOutButton = document.getElementById("logout_button")
+
+/*
+//Sign up function --------------------------------There is a strange error here
+signUpForm.addEventListener("submit", async function (event){
+    event.preventDefault();
+
+    let userName = document.getElementById("signIn_user_name").value;
+    let email = document.getElementById("signIn_email").value;
+    let password = document.getElementById("signIn_password").value;
+    let repPassword = document.getElementById("signIn_repeat_password").value;
+
+    if(password != repPassword){
+        alert("Repeated password did not match with the first one.")
+        return;
+    }
+
+    try {
+        //Create auth user
+        await auth.createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+            console.log('User registered');
+            const user = userCredential.user;
+            console.log(user)
+            signUpForm.reset();
+        });
+
+
+
+    } catch(error) {
+        console.log(`There has been an error with code: ${error.code}: ${error.message}`)
+    }
+
+})
+
+
+
+//Log in function
+logInForm.addEventListener("submit", async function (event){
+    event.preventDefault();
+
+    let email = document.getElementById("login_email").value;
+    let password = document.getElementById("login_password").value;
+
+    //Call the collection in the DB
+    const docRef = doc(db, "users", email);
+    //Search a document that matches with our ref
+    const docSnap = await getDoc(docRef);
+
+    auth.signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      console.log('User authenticated')
+      const user = userCredential.user;
+      logInForm.reset();
     })
-      .catch(() => console.log('Error borrando documento'));
-  };
+    .then(() => {
+      if (docSnap.exists()) {
+        console.log(`Hello, ${email}`)
+      } else {
+        console.log("No such document!");
+    }})
+    .catch((error) => {
+      console.log('Invalid user or password');
+      const errorCode = error.code;
+      const errorMessage = error.message;
+    });
+
+})
 
 
+//Logout function
+logOutButton.addEventListener('click', function (){
+    auth.signOut().then(() => {
+      console.log('Logout user')
+    }).catch((error) => {
+      console.log('Error: ', error)
+    });
+  })
 
-  
+//Observe the user's state
+let state = auth.onAuthStateChanged(user => {
+    if(user){
+      console.log('Logged user');
+    }else{
+      console.log('No logged user');
+    }
+  })
+
+ */
+
 
 
 // Backend
@@ -46,8 +135,8 @@ function deleteGame(userName, gameId){
 
 
 // Initialize variables:
-let userName = "Elena";
-let gameId = "game_1";
+let userName = "Jorge";
+let gameId = "game_3";
 let newGameKey = "new_game";
 
 let score = 0;
@@ -287,7 +376,7 @@ function getGameInfo(score, numberOfQuestions){
     let hours = date.getHours();
     let minutes = date.getMinutes();
     date = `${year}-${month}-${day} (${hours}:${minutes})`;
-    score = score*100/numberOfQuestions;
+    score = Math.round(score*100/numberOfQuestions);
 
     gameInfo = {id, date, score};
 }
