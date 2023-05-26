@@ -68,12 +68,20 @@ async function getQuestionsAndBegin(){
 
 
 // Local Storage functions
-function saveInLocalStorage(item, name){
+function saveQuestionsInLocalStorage(item, name){
     let arr = [];
     for(let i in item){
         arr.push(item[i]);
     }
     localStorage[name] = JSON.stringify(arr);
+    console.log(item)
+}
+
+function saveGameInLocalStorage(item, name){ // Data tree for firestore: get prev.Games, then add new one and store
+    let arr = [];
+    arr.push(item);
+    localStorage[name] = JSON.stringify(arr);
+    console.log(item)
 }
 
 function getLocalStorageQuestion(name, index){
@@ -102,6 +110,7 @@ function readAllLocalStorage(){
 // Initialize variables:
 let gameName = "game5"
 let score = 0;
+let gameInfo;
 
 let quesIndex = 0;
 let quesNum = quesIndex + 1;
@@ -133,12 +142,12 @@ function changeSpanBar() {
 async function pressNextButton(){
     let userChoices = Object.keys(userAnsCollection).length;
     pressedNext++;
+    let numberOfQuestions = localStorageLength(gameName);
+
     if (quesIndex == 0){
-        await getQuestionsAndBegin().then(item => saveInLocalStorage(item, gameName));
+        await getQuestionsAndBegin().then(item => saveQuestionsInLocalStorage(item, gameName));
         let questionFromLocalStorage = getLocalStorageQuestion(gameName, quesIndex);
         createQuestionCards(questionFromLocalStorage);
-
-        let numberOfQuestions = localStorageLength(gameName);
         numBar(numberOfQuestions);
 
     } else if (userChoices != pressedNext){
@@ -154,24 +163,21 @@ async function pressNextButton(){
             confirmButtonColor: 'rgb(111, 65, 65)',
             confirmButtonText: 'OK'
           })
-
         pressedNext--;
     } else {
         //Hide the previous card and go on with the next one 
-        let numberOfQuestions = localStorageLength(gameName);
-        
         let currentCard = document.querySelector(`#question_card_${quesNum}`);
         currentCard.classList.add("hideCard");
         changeSpanBar();
 
         let questionFromLocalStorage = getLocalStorageQuestion(gameName, quesIndex);
         createQuestionCards(questionFromLocalStorage);
-        
-        if (quesIndex == numberOfQuestions){
-            document.querySelector(".button").classList.add("hideCard");
-            let divButton = document.querySelector("#divButton");
-            divButton.innerHTML += '<button id="endQuiz" onclick="checkAnswers()" class="button">Finalizar Quiz</button>';
-            acordeon.appendChild(divButton); 
+
+        if(quesIndex == numberOfQuestions){
+        document.querySelector(".button").classList.add("hideCard");
+        let divButton = document.querySelector("#divButton");
+        divButton.innerHTML += '<button id="endQuiz" onclick="checkAnswers()" class="button">Finalizar Quiz</button>';
+        acordeon.appendChild(divButton); 
         }
     }
 }
@@ -207,72 +213,61 @@ function markAnswer(questionNum, userAnswer, answerID){
     userAnsCollection[questionNum] = {"answer": userAnswer, "id": answerID};
 }
 
-
-
-
-
-
-function hideButtons() {
-
-    let buttonsDiv = document.getElementsByClassName('radio_div');
-    console.log(buttonsDiv);
-    for (let i = 0; i < buttonsDiv.length; i++) {
-        buttonsDiv[i].classList.add("visibility_hidden");
+//At the end, all questions are showed up and you can see the answers, but it will be better if they open with a transition
+function acordeonFunctionality() {
+    let questionCards = document.querySelectorAll(".question_card");
+    for (let i in questionCards){
+        questionCards[i].classList.add("acordeon_function");
     }
-
-
-//     let allCards = document.querySelectorAll(".question_card");
-//    for (let i = 0; i < allCards.length; i++) {
-    
-//        allCards[i].addEventListener('click', ()=> {
-//            buttonsDiv[i].classList.remove})
-       
-    
-//    }
- 
-        
-    };
+};
     
 
 
 
+// Put the main game info in an object to store and print the graph
+function getGameInfo(score, numberOfQuestions){
+    let id = gameName;
+    let date = new Date;
+    year = date.getFullYear();
+    month = date.getMonth();
+    day = date.getDay();
+    date = `${year}-${month}-${day}`;
+    score = score*100/numberOfQuestions;
 
-
+    gameInfo = {id, date, score};
+}
 
 // Check answers
 function checkAnswers(){
-
+    changeSpanBar();
     let questionNumbersArr = Object.keys(correctAnsCollection);
-
+    let numberOfQuestions = questionNumbersArr.length;
 
     let allCards = document.querySelectorAll(".question_card");
     allCards.forEach(item => item.classList.remove("hideCard"));
-    acordeon.setAttribute('class','acordeon');
     
-    hideButtons();
-    
-
-
     for(let i=0; i<questionNumbersArr.length; i++){
         i;
         let correct_answer = correctAnsCollection[questionNumbersArr[i]].answer
         let correctId = correctAnsCollection[questionNumbersArr[i]].id
-
         let userAnswer = userAnsCollection[questionNumbersArr[i]].answer
         let userId = userAnsCollection[questionNumbersArr[i]].id
 
-        if(correct_answer == userAnswer){
+        if(correct_answer == userAnswer){ //A solution to colour the answers would be give them a correct-incorrect class, but I've tried and I dont get the class added
             score++;
             let correctAnsButton = document.querySelector(`#${correctId}`);
-            correctAnsButton.style.background = "green";
+            correctAnsButton.classList.add("correct_answer");
         } else {
             let correctAnsButton = document.querySelector(`#${correctId}`);
-            correctAnsButton.style.background = "green";
+            correctAnsButton.classList.add("correct_answer");
             let incorrectAnsButton = document.querySelector(`#${userId}`);
-            incorrectAnsButton.style.background = "red";
+            incorrectAnsButton.classList.add("incorrect_answer");
         }
     }
-    return score;
+    
+    getGameInfo(score, numberOfQuestions);
+    saveGameInLocalStorage(gameInfo, "gamesInfo");
+    acordeonFunctionality();
 }
 
 

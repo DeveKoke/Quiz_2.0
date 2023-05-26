@@ -82,9 +82,7 @@ select{
 /* DIV CONTAINERS */
 .body_bis{
 background-image: url('assets/fondoMain.jpg') ;
-background-repeat: no-repeat;
 background-size: 190%;
-
 background-repeat: repeat-y;
 min-height: 100vh;
 margin: 0;
@@ -92,7 +90,6 @@ margin: 0;
 }
 .main_bis{
   background-image: url('assets/fondoMain.jpg') ;
-  background-repeat: no-repeat;
   background-size: 150%;
   padding: 1em .4em 0em;
   flex-grow: 1;
@@ -114,16 +111,6 @@ margin: 0;
   border-radius: 10px;
   padding: .6em 1em;
   margin: 3% 3% ;
-}
-.kindWrapper{
-  background-color: var(--main-whitebone-color);
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: .8em 1em 1.2em;
-  margin: 7em auto;
-  width: 35%;
 }
 .kindWrapper{
   background-color: var(--main-whitebone-color);
@@ -206,24 +193,34 @@ font-size: .9em;
 font-weight: bold;
 border: solid var(--main-brown-color);
 }
+.answerButton:hover{
+  background-color: var(--main-lightgreen-color);
+}
 .hideCard{
   display: none;
 }
-.question_card:hover .radio_div{
-  display: block;
-}
+
 
 
 /* QUESTION BOX ANIMATION */
 .acordeon {
     width: 88%;
-    height: 115em;
     padding: 2.5em 0em;
     display: flex;
     justify-content: center;
     flex-direction: column;
     margin: 0 6%;
-  }
+}
+.acordeon_function{
+
+}
+.acordeon_function .radio_div{
+  display: none;
+}
+.acordeon_function:hover .radio_div{
+  display: block;
+}
+
   /* .acordeonBox { 
     flex-basis: 10%;
     height: 100%;
@@ -274,6 +271,12 @@ border: solid var(--main-brown-color);
   cursor: pointer;
 }
 
+.correct_answer{
+  background-color:  green;
+}
+.incorrect_answer{
+  background-color: red;
+}
 
 
 
