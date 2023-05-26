@@ -8,28 +8,29 @@
     </head>
     <body class="body_bis">
         <header>
-            <h1>QUIZTORIA</h1>
+            <h1>QUIZTORY</h1>
         </header>
         <main>
             <section class="kindWrapper">
-                <label>Elige dificultad: </label>
+                <label>Game level: </label>
                 <select name="difficulty" id="difficulty" >
                     <option value=""> ---</option>
-                    <option value="easy">Fácil</option>
-                    <option value="medium">Difícil</option>
+                    <option value="easy">Easy</option>
+                    <option value="medium">Difficult</option>
                 </select>
-                <label>Número de preguntas: </label>
+                <label>Number of questions: </label>
                 <input type="number" min="5" max="50" step="1" placeholder="5" id="userNum">
                  <button id="getQuestions" onclick="pressNextButton()">LETS BEGIN!</button>
             </section>
             <section id="progressWrapper">
                 <!-- INSERTAR NUMEROS DE BARRA DE PROGRESO AQUI -->
             </section>
+            
             <section id="acordeon">
                     <!-- INTERTAR PREGUNTAS DEL  DOM  AQUI -->
             </section>
             <div id="divButton">
-                <button class="button" onclick="pressNextButton()"> SIGUIENTE </button>
+                <button class="button" id="nextButton" onclick="pressNextButton()"> NEXT </button>
             </div>
         </main>
         <footer class="main_footer">
