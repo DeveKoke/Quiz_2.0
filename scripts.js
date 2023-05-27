@@ -1,5 +1,156 @@
+// FIREBASE FIRESTORE
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyAKZ-KGDnv0hUzez3Kjya0QJuVmp75387Q",
+    authDomain: "quiz-2-14171.firebaseapp.com",
+    projectId: "quiz-2-14171",
+    storageBucket: "quiz-2-14171.appspot.com",
+    messagingSenderId: "338864848243",
+    appId: "1:338864848243:web:109afe970ab0a4515cd906"
+  };
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+//Add game to a user
+function addGameInfo(userName, gameId, gameInfo){
+    db.collection(userName).doc(gameId).set(gameInfo).then((docRef) => {
+    console.log("Document written with ID: ", docRef.id)
+    })
+    .catch((error) => console.error("Error adding document: ", error));
+};
 
 
+
+// FIREBASE AUTH
+//Initialize Auth
+const auth = firebase.auth();
+const user = auth.currentUser;
+
+//Initialize cloudstore
+//---------------const storage = getStorage();
+
+let signUpForm = document.getElementById("signup_form");
+let logInForm = document.getElementById("login_form");
+let logOutButton = document.getElementById("logout_button")
+
+
+//Sign up function --------------------------------There is a strange error here
+signUpForm.addEventListener("submit", async function (event){
+    event.preventDefault();
+
+    let userName = document.getElementById("signIn_user_name").value;
+    let email = document.getElementById("signIn_email").value;
+    let password = document.getElementById("signIn_password").value;
+    let repPassword = document.getElementById("signIn_repeat_password").value;
+
+    if(password != repPassword){
+        alert("Repeated password did not match with the first one.")
+        return;
+    }
+
+    try {
+        //Create auth user
+        await auth.createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+            console.log('User registered');
+            const user = userCredential.user;
+            console.log(user)
+            signUpForm.reset();
+        });
+    } catch(error) {
+        console.log(`There has been an error with code: ${error.code}: ${error.message}`)
+    }
+
+})
+
+
+
+//Log in function
+logInForm.addEventListener("submit", async function (event){
+    event.preventDefault();
+
+    let email = document.getElementById("login_email").value;
+    let password = document.getElementById("login_password").value;
+
+    /* //Call the collection in the DB
+    const docRef = doc(db, "users", email);
+    //Search a document that matches with our ref
+    const docSnap = await getDoc(docRef); */
+
+    auth.signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      console.log('User authenticated')
+      const user = userCredential.user;
+      //logInForm.reset();
+    })
+    .then(() => {
+        console.log(`Hello, ${email}`);
+      })
+    .catch((error) => {
+      console.log('Invalid user or password');
+      const errorCode = error.code;
+      const errorMessage = error.message;
+    });
+
+})
+
+
+//Logout function
+logOutButton.addEventListener('click', function (){
+    auth.signOut().then(() => {
+      console.log('Logout user');
+
+    }).catch((error) => {
+      console.log('Error: ', error)
+    });
+})
+
+
+//Observe the user's state
+let state = auth.onAuthStateChanged(user => {
+    if(user){
+      console.log('Logged user');
+      document.querySelector(".kindWrapper").classList.remove("hideCard");
+      document.querySelector(".auth_form").classList.add("hideCard");
+    }else{
+      console.log('No logged user');
+      document.querySelector(".kindWrapper").classList.add("hideCard");
+      document.querySelector(".auth_form").classList.remove("hideCard");
+    }
+  })
+
+
+
+
+
+// Backend
+// -----------------------------------------------------------------------------------------------------------------------------------------------------
+// Frontend
+
+
+
+
+
+
+// Initialize variables:
+let userName = "Jorge";
+let gameId = "game_4";
+let newGameKey = "new_game";
+
+let score = 0;
+let gameInfo;
+
+let quesIndex = 0;
+let quesNum = quesIndex + 1;
+
+let pressedNext = -1;
+let correctAnsCollection = {};
+let userAnsCollection = {};
+
+
+// Main elements
 let quizForm = document.querySelector(".quizForm"); 
 let acordeon = document.querySelector("#acordeon");
 
@@ -68,12 +219,20 @@ async function getQuestionsAndBegin(){
 
 
 // Local Storage functions
-function saveInLocalStorage(item, name){
+function saveQuestionsInLocalStorage(item, name){
     let arr = [];
     for(let i in item){
         arr.push(item[i]);
     }
     localStorage[name] = JSON.stringify(arr);
+    console.log(item)
+}
+
+function saveGameInLocalStorage(item, name){ // Data tree for firestore: get prev.Games, then add new one and store
+    let arr = [];
+    arr.push(item);
+    localStorage[name] = JSON.stringify(arr);
+    console.log(item)
 }
 
 function getLocalStorageQuestion(name, index){
@@ -81,10 +240,14 @@ function getLocalStorageQuestion(name, index){
     return questions[index]
 }
 
-function localStorageLength(name){
+function localStorageLength(name){ //if undefined => length=0
     let questions = JSON.parse(localStorage.getItem(name));
-    let total = questions.length;
-    return total
+    if (questions){
+        let total = questions.length;
+        return total;
+    } else {
+        return 0;
+    }
 }
 
 function readAllLocalStorage(){
@@ -95,20 +258,6 @@ function readAllLocalStorage(){
 }
 
 
-
-
-
-
-// Initialize variables:
-let gameName = "game5"
-let score = 0;
-
-let quesIndex = 0;
-let quesNum = quesIndex + 1;
-
-let pressedNext = -1;
-let correctAnsCollection = {};
-let userAnsCollection = {};
 
 
 // Función para pintar los números de la barra de progreso:
@@ -132,20 +281,23 @@ function changeSpanBar() {
 // Function that manage what happens when you press "Next" button:
 async function pressNextButton(){
     let userChoices = Object.keys(userAnsCollection).length;
-    const nextButton = document.getElementById('nextButton');
-    const progressBar = document.getElementById('progressWrapper');
+    
     pressedNext++;
-    if (quesIndex == 0){
-        await getQuestionsAndBegin().then(item => saveInLocalStorage(item, gameName));
-        let questionFromLocalStorage = getLocalStorageQuestion(gameName, quesIndex);
-        createQuestionCards(questionFromLocalStorage);
+    let numberOfQuestions = localStorageLength(newGameKey);
 
-        let numberOfQuestions = localStorageLength(gameName);
+    if (quesIndex == 0){
+        
+        await getQuestionsAndBegin().then(item => saveQuestionsInLocalStorage(item, newGameKey));
+        let questionFromLocalStorage = getLocalStorageQuestion(newGameKey, quesIndex);
+        createQuestionCards(questionFromLocalStorage);
+        numberOfQuestions = localStorageLength(newGameKey);
         numBar(numberOfQuestions);
 
-        nextButton.style.display = 'block';
-        progressBar.style.display = 'flex'
+        let progressBar = document.querySelector('#progressWrapper.hideCard');
+        progressBar.classList.remove("hideCard");
 
+        let nextButton = document.getElementById('nextButton');
+        nextButton.classList.remove("hideCard");
 
     } else if (userChoices != pressedNext){
         //Sweet Alert!!
@@ -160,23 +312,20 @@ async function pressNextButton(){
             confirmButtonColor: 'rgb(111, 65, 65)',
             confirmButtonText: 'OK'
           })
-
         pressedNext--;
     } else {
         //Hide the previous card and go on with the next one 
-        let numberOfQuestions = localStorageLength(gameName);
-        
         let currentCard = document.querySelector(`#question_card_${quesNum}`);
         currentCard.classList.add("hideCard");
         changeSpanBar();
 
-        let questionFromLocalStorage = getLocalStorageQuestion(gameName, quesIndex);
+        let questionFromLocalStorage = getLocalStorageQuestion(newGameKey, quesIndex);
         createQuestionCards(questionFromLocalStorage);
-        
+    
         if (quesIndex == numberOfQuestions){
             document.querySelector(".button").classList.add("hideCard");
             let divButton = document.querySelector("#divButton");
-            divButton.innerHTML += '<button id="endQuiz" onclick="checkAnswers()" class="button"><a href="results.html">MY RESULTS</a></button>';
+            divButton.innerHTML += '<button id="endQuiz" onclick="checkAnswers()" class="button">END QUIZ</button>';
             acordeon.appendChild(divButton); 
         }
     }
@@ -213,73 +362,84 @@ function markAnswer(questionNum, userAnswer, answerID){
     userAnsCollection[questionNum] = {"answer": userAnswer, "id": answerID};
 }
 
-
-
-
-
-
-function hideButtons() {
-
-    let buttonsDiv = document.getElementsByClassName('radio_div');
-    console.log(buttonsDiv);
-    for (let i = 0; i < buttonsDiv.length; i++) {
-        buttonsDiv[i].classList.add("visibility_hidden");
+//At the end, all questions are showed up and you can see the answers, but it will be better if they open with a transition
+function acordeonFunctionality() {
+    let questionCards = document.querySelectorAll(".question_card");
+    for (let i in questionCards){
+        questionCards[i].classList.add("acordeon_function");
     }
-
-
-//     let allCards = document.querySelectorAll(".question_card");
-//    for (let i = 0; i < allCards.length; i++) {
-    
-//        allCards[i].addEventListener('click', ()=> {
-//            buttonsDiv[i].classList.remove})
-       
-    
-//    }
- 
-        
-    };
+};
     
 
 
 
+// Put the main game info in an object to store and print the graph
+function getGameInfo(score, numberOfQuestions){
+    let id = gameId;
+    let date = new Date;
+    let year = date.getFullYear();
+    let month = date.getMonth();
+    let day = date.getDay();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    date = `${year}-${month}-${day} (${hours}:${minutes})`;
+    score = Math.round(score*100/numberOfQuestions);
 
-
+    gameInfo = {id, date, score};
+}
 
 // Check answers
 function checkAnswers(){
-
+    changeSpanBar();
     let questionNumbersArr = Object.keys(correctAnsCollection);
-
+    let numberOfQuestions = questionNumbersArr.length;
 
     let allCards = document.querySelectorAll(".question_card");
     allCards.forEach(item => item.classList.remove("hideCard"));
-    acordeon.setAttribute('class','acordeon');
     
-    hideButtons();
-    
-
-
     for(let i=0; i<questionNumbersArr.length; i++){
         i;
         let correct_answer = correctAnsCollection[questionNumbersArr[i]].answer
         let correctId = correctAnsCollection[questionNumbersArr[i]].id
-
         let userAnswer = userAnsCollection[questionNumbersArr[i]].answer
         let userId = userAnsCollection[questionNumbersArr[i]].id
 
-        if(correct_answer == userAnswer){
+        if(correct_answer == userAnswer){ //A solution to colour the answers would be give them a correct-incorrect class, but I've tried and I dont get the class added
             score++;
             let correctAnsButton = document.querySelector(`#${correctId}`);
-            correctAnsButton.style.background = "green";
+            correctAnsButton.classList.add("correct_answer");
         } else {
             let correctAnsButton = document.querySelector(`#${correctId}`);
-            correctAnsButton.style.background = "green";
+            correctAnsButton.classList.add("correct_answer");
             let incorrectAnsButton = document.querySelector(`#${userId}`);
-            incorrectAnsButton.style.background = "red";
+            incorrectAnsButton.classList.add("incorrect_answer");
         }
     }
-    return score;
+    // hide "End quiz" button and show "My results" anchor:
+    let endQuizButton = document.querySelector("#endQuiz");
+    endQuizButton.classList.add("hideCard");
+
+    let divButton = document.querySelector("#divButton");
+    divButton.innerHTML += '<button id="my_results" class="button"><a href="results.html">MY RESULTS</a></button>';
+    acordeon.appendChild(divButton);
+
+    // Get game info and save it in Local storage and in Firestore:
+    getGameInfo(score, numberOfQuestions);
+    saveGameInLocalStorage(gameInfo, "gamesInfo");
+    addGameInfo(userName, gameId, gameInfo);
+
+    // Acordeon functionality: there is some error but it is not relevant:
+    acordeonFunctionality();
 }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -333,5 +493,6 @@ function chartScore (){
     new Chartist.Bar('.ct-chart', data, options);
   
 }
-console.log(chartScore);
+/* 
 chartScore();
+ */
