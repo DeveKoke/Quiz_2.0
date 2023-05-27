@@ -86,9 +86,7 @@ a{
 /* DIV CONTAINERS */
 .body_bis{
 background-image: url('assets/fondoMain.jpg') ;
-background-repeat: no-repeat;
 background-size: 190%;
-
 background-repeat: repeat-y;
 min-height: 100vh;
 margin: 0;
@@ -96,7 +94,6 @@ margin: 0;
 }
 .main_bis{
   background-image: url('assets/fondoMain.jpg') ;
-  background-repeat: no-repeat;
   background-size: 150%;
   padding: 1em .4em 0em;
   flex-grow: 1;
@@ -104,7 +101,9 @@ margin: 0;
 }
 .main_footer{
   margin-top: auto;
-  display: table;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
 }
 #encabezado{
@@ -147,7 +146,7 @@ margin: 0;
 }
 #progressWrapper{
   margin-top: 4.5em;
-  display: none;
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
@@ -156,6 +155,9 @@ margin: 0;
   border-radius: 15px;
   width: 93%;
   margin: 2em auto;
+}
+#progressWrapper.hideCard{
+  display: none;
 }
 .progressBef{
   margin:  0% .3% 1%;
@@ -233,24 +235,37 @@ font-size: .9em;
 font-weight: bold;
 border: solid var(--main-brown-color);
 }
+.answerButton:hover{
+  background-color: var(--main-lightgreen-color);
+}
 .hideCard{
   display: none;
 }
-.question_card:hover .radio_div{
-  display: block;
+.auth_form.hideCard{
+  display: none;
 }
+
 
 
 /* QUESTION BOX ANIMATION */
 .acordeon {
     width: 88%;
-    height: 115em;
     padding: 2.5em 0em;
     display: flex;
     justify-content: center;
     flex-direction: column;
     margin: 0 6%;
-  }
+}
+.acordeon_function{
+
+}
+.acordeon_function .radio_div{
+  display: none;
+}
+.acordeon_function:hover .radio_div{
+  display: block;
+}
+
   /* .acordeonBox { 
     flex-basis: 10%;
     height: 100%;
@@ -300,7 +315,7 @@ border: solid var(--main-brown-color);
   background-color: rgb(25, 117, 117);
   cursor: pointer;
 }
-#nextButton{
+#nextButton.hideCard{
   display: none;
 }
 a:link{
@@ -322,6 +337,35 @@ color: var(--main-whitebone-color);
   letter-spacing: 7px;
 }
 
+.correct_answer{
+  background-color:  green;
+}
+.incorrect_answer{
+  background-color: red;
+}
+
+
+/* *Auth form -------------------------------------------------*/
+.auth_form {
+  background-color: var(--main-beige-color);
+  width: 97%;
+  height: 100%;
+  margin: 0em auto 1em;
+  padding-bottom: 2%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 15px;
+  font-family: Aleo;
+}
+#signup_form{
+  display: flex;
+  flex-direction: column;
+}
+#login_form{
+  display: flex;
+  flex-direction: column;
+}
 
 
 
