@@ -101,7 +101,9 @@ margin: 0;
 }
 .main_footer{
   margin-top: auto;
-  display: table;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
 }
 #encabezado{
@@ -144,7 +146,7 @@ margin: 0;
 }
 #progressWrapper{
   margin-top: 4.5em;
-  display: none;
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
@@ -153,6 +155,9 @@ margin: 0;
   border-radius: 15px;
   width: 93%;
   margin: 2em auto;
+}
+#progressWrapper.hideCard{
+  display: none;
 }
 .progressBef{
   margin:  0% .3% 1%;
@@ -236,6 +241,9 @@ border: solid var(--main-brown-color);
 .hideCard{
   display: none;
 }
+.auth_form.hideCard{
+  display: none;
+}
 
 
 
@@ -307,7 +315,7 @@ border: solid var(--main-brown-color);
   background-color: rgb(25, 117, 117);
   cursor: pointer;
 }
-#nextButton{
+#nextButton.hideCard{
   display: none;
 }
 a:link{

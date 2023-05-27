@@ -35,7 +35,7 @@ let signUpForm = document.getElementById("signup_form");
 let logInForm = document.getElementById("login_form");
 let logOutButton = document.getElementById("logout_button")
 
-/*
+
 //Sign up function --------------------------------There is a strange error here
 signUpForm.addEventListener("submit", async function (event){
     event.preventDefault();
@@ -59,9 +59,6 @@ signUpForm.addEventListener("submit", async function (event){
             console.log(user)
             signUpForm.reset();
         });
-
-
-
     } catch(error) {
         console.log(`There has been an error with code: ${error.code}: ${error.message}`)
     }
@@ -77,23 +74,20 @@ logInForm.addEventListener("submit", async function (event){
     let email = document.getElementById("login_email").value;
     let password = document.getElementById("login_password").value;
 
-    //Call the collection in the DB
+    /* //Call the collection in the DB
     const docRef = doc(db, "users", email);
     //Search a document that matches with our ref
-    const docSnap = await getDoc(docRef);
+    const docSnap = await getDoc(docRef); */
 
     auth.signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
       console.log('User authenticated')
       const user = userCredential.user;
-      logInForm.reset();
+      //logInForm.reset();
     })
     .then(() => {
-      if (docSnap.exists()) {
-        console.log(`Hello, ${email}`)
-      } else {
-        console.log("No such document!");
-    }})
+        console.log(`Hello, ${email}`);
+      })
     .catch((error) => {
       console.log('Invalid user or password');
       const errorCode = error.code;
@@ -106,22 +100,28 @@ logInForm.addEventListener("submit", async function (event){
 //Logout function
 logOutButton.addEventListener('click', function (){
     auth.signOut().then(() => {
-      console.log('Logout user')
+      console.log('Logout user');
+
     }).catch((error) => {
       console.log('Error: ', error)
     });
-  })
+})
+
 
 //Observe the user's state
 let state = auth.onAuthStateChanged(user => {
     if(user){
       console.log('Logged user');
+      document.querySelector(".kindWrapper").classList.remove("hideCard");
+      document.querySelector(".auth_form").classList.add("hideCard");
     }else{
       console.log('No logged user');
+      document.querySelector(".kindWrapper").classList.add("hideCard");
+      document.querySelector(".auth_form").classList.remove("hideCard");
     }
   })
 
- */
+
 
 
 
@@ -136,7 +136,7 @@ let state = auth.onAuthStateChanged(user => {
 
 // Initialize variables:
 let userName = "Jorge";
-let gameId = "game_3";
+let gameId = "game_4";
 let newGameKey = "new_game";
 
 let score = 0;
@@ -281,8 +281,7 @@ function changeSpanBar() {
 // Function that manage what happens when you press "Next" button:
 async function pressNextButton(){
     let userChoices = Object.keys(userAnsCollection).length;
-    const nextButton = document.getElementById('nextButton');
-    const progressBar = document.getElementById('progressWrapper');
+    
     pressedNext++;
     let numberOfQuestions = localStorageLength(newGameKey);
 
@@ -294,9 +293,11 @@ async function pressNextButton(){
         numberOfQuestions = localStorageLength(newGameKey);
         numBar(numberOfQuestions);
 
-        nextButton.style.display = 'block';
-        progressBar.style.display = 'flex'
+        let progressBar = document.querySelector('#progressWrapper.hideCard');
+        progressBar.classList.remove("hideCard");
 
+        let nextButton = document.getElementById('nextButton');
+        nextButton.classList.remove("hideCard");
 
     } else if (userChoices != pressedNext){
         //Sweet Alert!!
@@ -320,11 +321,11 @@ async function pressNextButton(){
 
         let questionFromLocalStorage = getLocalStorageQuestion(newGameKey, quesIndex);
         createQuestionCards(questionFromLocalStorage);
-        
+    
         if (quesIndex == numberOfQuestions){
             document.querySelector(".button").classList.add("hideCard");
             let divButton = document.querySelector("#divButton");
-            divButton.innerHTML += '<button id="endQuiz" onclick="checkAnswers()" class="button"><a href="results.html">MY RESULTS</a></button>';
+            divButton.innerHTML += '<button id="endQuiz" onclick="checkAnswers()" class="button">END QUIZ</button>';
             acordeon.appendChild(divButton); 
         }
     }
@@ -414,12 +415,24 @@ function checkAnswers(){
             incorrectAnsButton.classList.add("incorrect_answer");
         }
     }
-    
+    // hide "End quiz" button and show "My results" anchor:
+    let endQuizButton = document.querySelector("#endQuiz");
+    endQuizButton.classList.add("hideCard");
+
+    let divButton = document.querySelector("#divButton");
+    divButton.innerHTML += '<button id="my_results" class="button"><a href="results.html">MY RESULTS</a></button>';
+    acordeon.appendChild(divButton);
+
+    // Get game info and save it in Local storage and in Firestore:
     getGameInfo(score, numberOfQuestions);
     saveGameInLocalStorage(gameInfo, "gamesInfo");
-    addGameInfo(userName, gameId, gameInfo)
+    addGameInfo(userName, gameId, gameInfo);
+
+    // Acordeon functionality: there is some error but it is not relevant:
     acordeonFunctionality();
 }
+
+
 
 
 
@@ -480,5 +493,6 @@ function chartScore (){
     new Chartist.Bar('.ct-chart', data, options);
   
 }
-console.log(chartScore);
+/* 
 chartScore();
+ */
