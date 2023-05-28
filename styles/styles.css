@@ -48,6 +48,7 @@ h2{
 h3{
   margin: 4%  auto 1%;
   padding: 0 .7em;
+  font-size: 1.4em;
 }
 p{
   text-align: center;
@@ -70,6 +71,7 @@ input[type=number]{
   width: 4em;
   height: 1.2em;
   font-size: 1.2em;
+  border-radius: 10px;
 }
 select{
   width: 8em;
@@ -84,6 +86,10 @@ a{
 
 
 /* DIV CONTAINERS */
+.idBar{
+  display: flex;
+
+}
 .body_bis{
 background-image: url('/assets/fondoMain.jpg') ;
 background-size: 190%;
@@ -104,7 +110,6 @@ margin: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
-
 }
 #encabezado{
   background-color: var(--main-whitebone-color);
@@ -207,6 +212,7 @@ margin: 0;
 }
 
 
+
 /* FORMATO CARDS */
 .question_card{
   background-color: var(--main-beige-color);
@@ -248,6 +254,7 @@ border: solid var(--main-brown-color);
 
 
 
+
 /* QUESTION BOX ANIMATION */
 .acordeon {
     width: 88%;
@@ -257,9 +264,9 @@ border: solid var(--main-brown-color);
     flex-direction: column;
     margin: 0 6%;
 }
-.acordeon_function{
+/* .acordeon_function{
 
-}
+} */
 .acordeon_function .radio_div{
   display: none;
 }
@@ -299,7 +306,7 @@ border: solid var(--main-brown-color);
 
 
 /* BUTTONS */
-.button{
+.button, .auth_form button{
   width: 60%;
   height: 3.6em;
   margin: .9em 0em 2em;
@@ -311,7 +318,7 @@ border: solid var(--main-brown-color);
   border-radius: 10px;
   letter-spacing: 7px;
 }
-.button:hover{
+.button, .auth_form button:hover{
   box-shadow: 0 0px 13px 3px rgb(84, 82, 82);
   background-color: rgb(25, 117, 117);
   cursor: pointer;
@@ -349,10 +356,10 @@ color: var(--main-whitebone-color);
 /* *Auth form -------------------------------------------------*/
 .auth_form {
   background-color: var(--main-beige-color);
-  width: 97%;
+  width: 95%;
   height: 100%;
-  margin: 0em auto 1em;
-  padding-bottom: 2%;
+  margin: 1em auto;
+  padding: 1em 0 1.5em;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -367,6 +374,18 @@ color: var(--main-whitebone-color);
   display: flex;
   flex-direction: column;
 }
+.auth_form  input[type=text]{
+  margin-bottom:1em; 
+  border-radius: 10px;
+  height: 1.7em;
+}
+.auth_form label{
+  font-size: 1.2em;
+}
+.auth_form button{
+  width:auto;
+}
+
 
 
 
