@@ -26,10 +26,10 @@ El repositorio está estructurado de la siguiente manera:
 
 - **home.html**: Página de inicio del juego que proporciona una introducción y una visión general del juego.
 - **questions.html**: Página principal del juego, donde se autentifica el usuario, se generan las preguntas y se almacenan las respuestas de los usuarios.
-- **results.html**: Página de resultados con la gráfica de puntuaciones históricas de partidas anteriores realizadas por el usuario.
+- **results.html**: Página de resultados con la gráfica de puntuaciones históricas de partidas anteriores realizadas por el usuario. Maneja la conexión con Firebase para la autenticación de usuarios y el almacenamiento de datos en Firestore.
 - **scripts.js**: Archivo JavaScript que contiene la lógica del juego, incluyendo el acceso a los endpoints, la generación de preguntas, el almacenamiento de respuestas y la manipulación de datos.
 - **styles.css**: Archivo CSS que contiene los estilos para las diferentes páginas, brindando una apariencia visualmente atractiva y coherente.
-- **firebase.js**: Archivo JavaScript que maneja la conexión con Firebase para la autenticación de usuarios y el almacenamiento de datos en Firestore.
+
 
 ## Configuración y requisitos
 

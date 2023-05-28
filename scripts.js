@@ -489,6 +489,22 @@ const getUserGames = () => {
         });
   
       })
-      .catch(() => console.log('Error reading documents')){};
+      .catch(() => console.log('Error reading documents'));
 };
 getUserGames();
+
+
+
+
+
+--------------------------------
+
+
+const userBar = (userName, userImg) => {
+    const header = document.getElementById('headerQuiz')
+    let user_idBar = `<div class="idBar">
+                    <p>${userName}</p>
+                    <img src="${userImg}" alt="user_image">
+                    </div>`
+    header.appendChild(user_idBar)
+}
