@@ -54,82 +54,10 @@ logOutButton.addEventListener('click', function (){
     });
 })
 
-//Observe the user's state
-async function getInfoAndDrawChart(){
-    try{
-        auth.onAuthStateChanged(async function (user) {
-            if(user){
-                console.log(auth.currentUser.displayName);
-                console.log(auth.currentUser.email);
-                userName = auth.currentUser.displayName;
-                userEmail = auth.currentUser.email;
-                console.log('Logged user');
-                readUserGamesInfo(userEmail);
-
-                db.collection(userEmail).get().then(querySnapshot => {
-                        querySnapshot.forEach(doc => {
-                        console.log({"game id": doc.id, "date": doc.data().date, "score": doc.data().score});
-
-                    })
-                })
-            }else{
-                console.log('No logged user');
-            }
-        })
-    } catch (error) {
-        console.log(`Ha habido un error: ${error}`)
-    }
-    
-}
-
-getInfoAndDrawChart()
-console.log(userName, userEmail)
-
-// Backend
-// -----------------------------------------------------------------------------------------------------------------------------------------------------
-// Frontend
+// GRAFICO PUNTUACIONES.
+function chartScore (dateChart, scoreChart){
 
 
-
-
-
-// *GRAFICO PUNTUACIONES.
-// readUserGamesInfo(userEmail)
-
-// let arrUserList = JSON.parse(localStorage.getItem('game5'));
-/* let arrUserList = [{
-    id: 1,
-    date: "05-04-2005",
-    score: 9
-},
-{
-    id: 1,
-    date: "06-08-2013",
-    score: 20
-},{
-    id: 1,
-    date: "04-06-2009",
-    score: 15
-},{
-    id: 1,
-    date: "2013-03-23",
-    score: 13
-},{
-    id: 1,
-    date: "2009-05-23",
-    score: 18
-}]
- */
-
-
-function chartScore (){
-    let dateChart = [];
-    let scoreChart = [];
-
-    for (i = 0; i < arrUserList.length; i++) {
-        dateChart.push(arrUserList[i].date) ;  
-        scoreChart.push(arrUserList[i].score) ;
-    }
     var data = {
         // * eje x
         labels: dateChart,
@@ -146,5 +74,36 @@ function chartScore (){
     new Chartist.Bar('.ct-chart', data, options);
 }
 
-chartScore();
 
+//If user is logged, get info from Firestore and print the chart:
+async function getInfoAndDrawChart(){
+    try{
+        auth.onAuthStateChanged(async function (user) {
+            if(user){
+                console.log('Logged user');
+                userName = auth.currentUser.displayName;
+                userEmail = auth.currentUser.email;
+                db.collection(userEmail).get().then(querySnapshot => {
+
+                    // Here is where the info is gotten
+                    let dateChart = [];
+                    let scoreChart = [];
+                    querySnapshot.forEach(doc => {
+                        dateChart.push(doc.data().date);
+                        scoreChart.push(doc.data().score);
+                    })
+                    // Here is where the chart is printed
+                    chartScore (dateChart, scoreChart);
+                })
+            }else{
+                console.log('No logged user');
+            }
+        })
+    } catch (error) {
+        console.log(`Ha habido un error: ${error}`)
+    }
+    
+}
+
+
+getInfoAndDrawChart()
