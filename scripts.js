@@ -150,6 +150,22 @@ let correctAnsCollection = {};
 let userAnsCollection = {};
 
 
+//SWEET ALERT FUNCTION
+const sweetAlert = (titleAlert, textAlert, imageAlert)=>{
+    Swal.fire({
+        title: titleAlert,
+        text: textAlert,
+        icon: 'warning',
+        imageUrl: imageAlert,
+        imageWidth: 400,
+        imageHeight: 200,
+        imageAlt: 'Custom image',
+        confirmButtonColor: 'rgb(111, 65, 65)',
+        confirmButtonText: 'OK'
+      })
+}
+
+
 // Main elements
 let quizForm = document.querySelector(".quizForm"); 
 let acordeon = document.querySelector("#acordeon");
@@ -158,24 +174,29 @@ let acordeon = document.querySelector("#acordeon");
 function createCongratsCard(score){
     let finalQuizMessages = [{
         title: "Congratulations!",
-        message: "You are practically an architect!",
-        score: 9
+        message: "You are practically as wise as Herodotus",
+        score: 90,
+        imageUrl: "https://www.worldhistory.org/img/r/p/1000x1200/6501.jpg.webp?v=1672313107"
     },{
         title: "Well done!",
-        message: "You seem to like it!",
-        score: 7
+        message: "You nailed it",
+        score: 75,
+        imageUrl: "https://www.nasa.gov/sites/default/files/styles/full_width/public/thumbnails/image/apollo_14_flag_on_the_moon_w_shepard_as14-66-9231.jpg?itok=TN1Lo0zP"
     },{
         title: "You have passed the test!",
-        message: "Just what everyone knows.",
-        score: 5
+        message: "You made it to the shore",
+        score: 50,
+        imageUrl: "https://cflvdg.avoz.es/sc/bucGdbY4RdMDyXECJi6iR2IgEcM=/768x/2018/11/17/00121542482282564373967/Foto/FN18C11F2_201631.jpg"
     },{
-        title: "Not good enough...",
-        message: "Obviously, it's not your favorite topic...",
-        score: 3
+        title: "Not good news..",
+        message: "Seems you ran into an iceberg",
+        score: 30,
+        imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/St%C3%B6wer_Titanic.jpg/450px-St%C3%B6wer_Titanic.jpg"
     },{
         title: "Really?!",
-        message: "Come on! You haven't even tried!",
-        score: 0
+        message: "You've disintegrated before even start the adventure",
+        score: 0,
+        imageUrl: "https://www.history.com/editorial/_next/image?url=https%3A%2F%2Fassets.editorial.aetnd.com%2Fuploads%2F2009%2F11%2Fthe-space-shuttle-challenger-exploded.jpg&w=1080&q=75"
     }]
 
     let index;
@@ -186,15 +207,12 @@ function createCongratsCard(score){
         }
     }
 
-    let title = finalQuizMessages[index].title;
-    let message = finalQuizMessages[index].message;
-    let congratsCard = `<article id="congrats_card" class="question_card">
-        <h3>${title}</h3>
-        <p>${message}</p>
-        <p>${score}/${totalPoints}</p>
-        <button onclick="showAnswers()">Check answers</button>
-    </article>`
-    acordeon.innerHTML += congratsCard;
+    let titleAlert = finalQuizMessages[index].title;
+    let textAlert = finalQuizMessages[index].message;
+    let imageAlert = finalQuizMessages[index].imageUrl;
+    
+    sweetAlert(titleAlert, textAlert, imageAlert);
+
 }
 
 
@@ -265,7 +283,7 @@ function numBar(numberQuest) {
     for (let i = 1; i <= numberQuest; i++) {
         let spanBar = `<span id="sp${i}" class="progressBef">${i}</span>`  
         let progressBar = document.getElementById('progressWrapper');
-        progressBar.innerHTML += spanBar;     //TODO si no salen todas, usar un appendChild()
+        progressBar.innerHTML += spanBar;     
     }
 }
 
@@ -273,8 +291,7 @@ function numBar(numberQuest) {
 function changeSpanBar() {
     let spanNum = document.getElementById(`sp${quesIndex}`);
     spanNum.classList.remove('progressBef');
-    spanNum.classList.add('progressAft'); //* comprobar si valdría solo con añadir la clase que contenga en CSS el cambio de background en vez de quitar una y poner otra.
-}
+    spanNum.classList.add('progressAft');
 
 
 
@@ -301,17 +318,11 @@ async function pressNextButton(){
 
     } else if (userChoices != pressedNext){
         //Sweet Alert!!
-        Swal.fire({
-            title: '¡No tan rápido, Napoleón! ',
-            text: "Debes responder todas las preguntas.",
-            icon: 'warning',
-            imageUrl: 'https://s2.abcstatics.com/media/historia/2019/03/09/napoleon-bonaparte-kwYB--1248x698@abc.jpg',
-            imageWidth: 400,
-            imageHeight: 200,
-            imageAlt: 'Custom image',
-            confirmButtonColor: 'rgb(111, 65, 65)',
-            confirmButtonText: 'OK'
-          })
+        let titleAlert = '¡No tan rápido, Napoleón!';
+        let textAlert = "Debes responder todas las preguntas.";
+        let imageAlert = 'https://s2.abcstatics.com/media/historia/2019/03/09/napoleon-bonaparte-kwYB--1248x698@abc.jpg'
+       sweetAlert(titleAlert, textAlert, imageAlert);
+
         pressedNext--;
     } else {
         //Hide the previous card and go on with the next one 
@@ -373,20 +384,6 @@ function acordeonFunctionality() {
 
 
 
-// Put the main game info in an object to store and print the graph
-function getGameInfo(score, numberOfQuestions){
-    let id = gameId;
-    let date = new Date;
-    let year = date.getFullYear();
-    let month = date.getMonth();
-    let day = date.getDay();
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    date = `${year}-${month}-${day} (${hours}:${minutes})`;
-    score = Math.round(score*100/numberOfQuestions);
-
-    gameInfo = {id, date, score};
-}
 
 // Check answers
 function checkAnswers(){
@@ -444,55 +441,54 @@ function checkAnswers(){
 
 
 // *GRAFICO PUNTUACIONES.
-// let arrUserList = JSON.parse(localStorage.getItem('game5'));
-let arrUserList = [{
-    id: 1,
-    date: "05-04-2005",
-    score: 9
-},
-{
-    id: 1,
-    date: "06-08-2013",
-    score: 20
-},{
-    id: 1,
-    date: "04-06-2009",
-    score: 15
-},{
-    id: 1,
-    date: "2013-03-23",
-    score: 13
-},{
-    id: 1,
-    date: "2009-05-23",
-    score: 18
-}]
+// Put the main game info in an object to store and print the graph
+function getGameInfo(score, numberOfQuestions){
+    let id = gameId;
+    let date = new Date;
+    let year = date.getFullYear();
+    let month = date.getMonth();
+    let day = date.getDay();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    date = `${year}-${month}-${day} (${hours}:${minutes})`;
+    score = Math.round(score*100/numberOfQuestions);
 
-let dateChart = [];
-let scoreChart = [];
-function chartScore (){
-
-    for (i = 0; i < arrUserList.length; i++) {
-        dateChart.push(arrUserList[i].date) ;  
-        scoreChart.push(arrUserList[i].score) ;
-    }
-
-    var data = {
-        // * eje x
-        labels: dateChart,
-        // * valores para el eje x
-        series: [
-            scoreChart
-        ]
-    };
-    //* dimensiones de gráfica.
-    var options = {};
-    // Create a new line chart object where as first parameter we pass in a selector
-    // that is resolving to our chart container element. The Second parameter
-    // is the actual data object. As a third parameter we pass in our custom options.
-    new Chartist.Bar('.ct-chart', data, options);
-  
+    gameInfo = {id, date, score};
 }
-/* 
-chartScore();
- */
+
+
+//*READ USER DOC AND USE DATE AND SCORE TO PRINT CHART
+const getUserGames = () => {
+    db.collection("userName")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {   // 
+
+            let dateChart = [];
+            let scoreChart = [];
+        
+            for (i = 0; i < doc.length; i++) {
+                dateChart.push(doc[i].date) ;  
+                scoreChart.push(doc[i].score) ;
+            }
+        
+            var data = {
+                // * eje x
+                labels: dateChart,
+                // * valores para el eje x
+                series: [
+                    scoreChart
+                ]
+            };
+            //* dimensiones de gráfica.
+            var options = {};
+            // Create a new line chart object where as first parameter we pass in a selector
+            // that is resolving to our chart container element. The Second parameter
+            // is the actual data object. As a third parameter we pass in our custom options.
+            new Chartist.Bar('.ct-chart', data, options);
+        });
+  
+      })
+      .catch(() => console.log('Error reading documents')){};
+};
+getUserGames();
