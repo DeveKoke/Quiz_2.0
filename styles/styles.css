@@ -91,7 +91,7 @@ a{
 
 }
 .body_bis{
-background-image: url('assets/fondoMain.jpg') ;
+background-image: url('/assets/fondoMain.jpg') ;
 background-size: 190%;
 background-repeat: repeat-y;
 min-height: 100vh;
@@ -99,7 +99,7 @@ margin: 0;
 
 }
 .main_bis{
-  background-image: url('assets/fondoMain.jpg') ;
+  background-image: url('/assets/fondoMain.jpg') ;
   background-size: 150%;
   padding: 1em .4em 0em;
   flex-grow: 1;
