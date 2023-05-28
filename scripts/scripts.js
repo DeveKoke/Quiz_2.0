@@ -152,12 +152,25 @@ logOutButton.addEventListener('click', function (){
     });
 })
 
+function createUserBar(userName){
+    const header = document.getElementById('headerQuiz');
+    let user_idBar = `<div class="idBar">
+                    <p>Hello, ${userName}</p>
+                    </div>`;
+    header.innerHTML += user_idBar;
+}
+
+
 //Observe the user's state
 let state = auth.onAuthStateChanged(user => {
     if(user){
         console.log('Logged user');
         document.querySelector(".kindWrapper").classList.remove("hideCard");
         document.querySelector(".auth_form").classList.add("hideCard");
+        let userName = auth.currentUser.displayName;
+        createUserBar(userName);
+
+
     }else{
         console.log('No logged user');
         document.querySelector(".kindWrapper").classList.add("hideCard");
@@ -251,6 +264,20 @@ function changeSpanBar() {
     spanNum.classList.add('progressAft'); //* comprobar si valdría solo con añadir la clase que contenga en CSS el cambio de background en vez de quitar una y poner otra.
 }
 
+// Sweet alert:
+const sweetAlert = (titleAlert, textAlert, imageAlert)=>{
+    Swal.fire({
+        title: titleAlert,
+        text: textAlert,
+        icon: 'warning',
+        imageUrl: imageAlert,
+        imageWidth: 400,
+        imageHeight: 200,
+        imageAlt: 'Custom image',
+        confirmButtonColor: 'rgb(111, 65, 65)',
+        confirmButtonText: 'OK'
+      })
+}	
 
 
 // Function that manage what happens when you press "Next" button:
@@ -276,17 +303,11 @@ async function pressNextButton(){
 
     } else if (userChoices != pressedNext){
         //Sweet Alert!!
-        Swal.fire({
-            title: '¡No tan rápido, Napoleón! ',
-            text: "Debes responder todas las preguntas.",
-            icon: 'warning',
-            imageUrl: 'https://s2.abcstatics.com/media/historia/2019/03/09/napoleon-bonaparte-kwYB--1248x698@abc.jpg',
-            imageWidth: 400,
-            imageHeight: 200,
-            imageAlt: 'Custom image',
-            confirmButtonColor: 'rgb(111, 65, 65)',
-            confirmButtonText: 'OK'
-          })
+        let titleAlert = '¡No tan rápido, Napoleón!';
+        let textAlert = "Debes responder todas las preguntas.";
+        let imageAlert = 'https://s2.abcstatics.com/media/historia/2019/03/09/napoleon-bonaparte-kwYB--1248x698@abc.jpg'
+        sweetAlert(titleAlert, textAlert, imageAlert);
+
         pressedNext--;
     } else {
         //Hide the previous card and go on with the next one 
@@ -397,6 +418,9 @@ async function checkAnswers(){
     let divButton = document.querySelector("#divButton");
     divButton.innerHTML += '<button id="my_results" class="button"><a href="results.html">MY RESULTS</a></button>';
     acordeon.appendChild(divButton);
+
+    //Sweet alert: congrats card:
+    createCongratsCard(score)
     
     try {
         
@@ -405,9 +429,8 @@ async function checkAnswers(){
     await readNumberOfUserGames(userEmail);
     getGameInfo(score, numberOfQuestions);
     saveGameInLocalStorage(gameInfo, "gamesInfo");
-    console.log(gameId)
-    console.log(userEmail);
     addGameInfoToFirestore(userEmail, gameId, gameInfo);
+
 
     // Acordeon functionality: there is some error but it is not relevant:
     acordeonFunctionality();
@@ -419,28 +442,33 @@ async function checkAnswers(){
 }
 
 
-// Congrats card
+
 function createCongratsCard(score){
     let finalQuizMessages = [{
         title: "Congratulations!",
-        message: "You are practically an architect!",
-        score: 9
+        message: "You are practically as wise as Herodotus",
+        score: 90,
+        imageUrl: "https://www.worldhistory.org/img/r/p/1000x1200/6501.jpg.webp?v=1672313107"
     },{
         title: "Well done!",
-        message: "You seem to like it!",
-        score: 7
+        message: "You nailed it",
+        score: 75,
+        imageUrl: "https://www.nasa.gov/sites/default/files/styles/full_width/public/thumbnails/image/apollo_14_flag_on_the_moon_w_shepard_as14-66-9231.jpg?itok=TN1Lo0zP"
     },{
         title: "You have passed the test!",
-        message: "Just what everyone knows.",
-        score: 5
+        message: "You made it to the shore",
+        score: 50,
+        imageUrl: "https://cflvdg.avoz.es/sc/bucGdbY4RdMDyXECJi6iR2IgEcM=/768x/2018/11/17/00121542482282564373967/Foto/FN18C11F2_201631.jpg"
     },{
-        title: "Not good enough...",
-        message: "Obviously, it's not your favorite topic...",
-        score: 3
+        title: "Not good news..",
+        message: "Seems you ran into an iceberg",
+        score: 30,
+        imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/St%C3%B6wer_Titanic.jpg/450px-St%C3%B6wer_Titanic.jpg"
     },{
         title: "Really?!",
-        message: "Come on! You haven't even tried!",
-        score: 0
+        message: "You've disintegrated before even start the adventure",
+        score: 0,
+        imageUrl: "https://www.history.com/editorial/_next/image?url=https%3A%2F%2Fassets.editorial.aetnd.com%2Fuploads%2F2009%2F11%2Fthe-space-shuttle-challenger-exploded.jpg&w=1080&q=75"
     }]
 
     let index;
@@ -451,18 +479,12 @@ function createCongratsCard(score){
         }
     }
 
-    let title = finalQuizMessages[index].title;
-    let message = finalQuizMessages[index].message;
-    let congratsCard = `<article id="congrats_card" class="question_card">
-        <h3>${title}</h3>
-        <p>${message}</p>
-        <p>${score}/${totalPoints}</p>
-        <button onclick="showAnswers()">Check answers</button>
-    </article>`
-    acordeon.innerHTML += congratsCard;
+    let titleAlert = finalQuizMessages[index].title;
+    let textAlert = finalQuizMessages[index].message;
+    let imageAlert = finalQuizMessages[index].imageUrl;
+    
+    sweetAlert(titleAlert, textAlert, imageAlert);
 }
-
-
 
 
 
