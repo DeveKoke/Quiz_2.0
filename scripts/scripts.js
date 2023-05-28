@@ -1,3 +1,26 @@
+// Initialize variables:
+let userEmail;
+let gameId;
+let newGameKey = "new_game";
+
+let score = 0;
+let gameInfo;
+
+let quesIndex = 0;
+let quesNum = quesIndex + 1;
+
+let pressedNext = -1;
+let correctAnsCollection = {};
+let userAnsCollection = {};
+
+
+// Main elements
+let quizForm = document.querySelector(".quizForm"); 
+let acordeon = document.querySelector("#acordeon");
+
+
+
+
 // FIREBASE FIRESTORE
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -13,13 +36,32 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-//Add game to a user
-function addGameInfo(userName, gameId, gameInfo){
-    db.collection(userName).doc(gameId).set(gameInfo).then((docRef) => {
+// Set "userEmail" to user email:
+async function getUserEmail(){
+    userEmail = auth.currentUser.email;
+}
+
+// Set game ID:
+async function readNumberOfUserGames(userEmail){
+    console.log(userEmail);
+    await db.collection(`${userEmail}`).get().then(querySnapshot => {
+        gameId = `game_${querySnapshot.size + 1}`;
+        console.log(gameId);
+    })
+    console.log(gameId);
+}
+
+//Add game to user game info:
+function addGameInfoToFirestore(userEmail, gameId, gameInfo){
+
+    console.log(userEmail, gameId, gameInfo)
+    db.collection(userEmail).doc(gameId).set(gameInfo).then((docRef) => {
     console.log("Document written with ID: ", docRef.id)
     })
     .catch((error) => console.error("Error adding document: ", error));
 };
+
+
 
 
 
@@ -40,7 +82,7 @@ let logOutButton = document.getElementById("logout_button")
 signUpForm.addEventListener("submit", async function (event){
     event.preventDefault();
 
-    let userName = document.getElementById("signIn_user_name").value;
+    let name = document.getElementById("signIn_user_name").value;
     let email = document.getElementById("signIn_email").value;
     let password = document.getElementById("signIn_password").value;
     let repPassword = document.getElementById("signIn_repeat_password").value;
@@ -54,18 +96,19 @@ signUpForm.addEventListener("submit", async function (event){
         //Create auth user
         await auth.createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
-            console.log('User registered');
-            const user = userCredential.user;
-            console.log(user)
-            signUpForm.reset();
+                userCredential.user.updateProfile({
+                    displayName: name
+                });
+                console.log('User registered');
+                let user = userCredential.user;
+                console.log(user);
+                signUpForm.reset();
         });
     } catch(error) {
         console.log(`There has been an error with code: ${error.code}: ${error.message}`)
     }
 
 })
-
-
 
 //Log in function
 logInForm.addEventListener("submit", async function (event){
@@ -83,10 +126,13 @@ logInForm.addEventListener("submit", async function (event){
     .then((userCredential) => {
       console.log('User authenticated')
       const user = userCredential.user;
+      console.log(userCredential);
+      userEmail = email;
+      console.log(`Hello, ${email}`);
       //logInForm.reset();
     })
     .then(() => {
-        console.log(`Hello, ${email}`);
+        
       })
     .catch((error) => {
       console.log('Invalid user or password');
@@ -96,31 +142,28 @@ logInForm.addEventListener("submit", async function (event){
 
 })
 
-
 //Logout function
 logOutButton.addEventListener('click', function (){
     auth.signOut().then(() => {
-      console.log('Logout user');
-
+        window.location.href = "/pages/question.html"
+        console.log('Logout user');
     }).catch((error) => {
       console.log('Error: ', error)
     });
 })
 
-
 //Observe the user's state
 let state = auth.onAuthStateChanged(user => {
     if(user){
-      console.log('Logged user');
-      document.querySelector(".kindWrapper").classList.remove("hideCard");
-      document.querySelector(".auth_form").classList.add("hideCard");
+        console.log('Logged user');
+        document.querySelector(".kindWrapper").classList.remove("hideCard");
+        document.querySelector(".auth_form").classList.add("hideCard");
     }else{
-      console.log('No logged user');
-      document.querySelector(".kindWrapper").classList.add("hideCard");
-      document.querySelector(".auth_form").classList.remove("hideCard");
+        console.log('No logged user');
+        document.querySelector(".kindWrapper").classList.add("hideCard");
+        document.querySelector(".auth_form").classList.remove("hideCard");
     }
-  })
-
+})
 
 
 
@@ -130,72 +173,6 @@ let state = auth.onAuthStateChanged(user => {
 // Frontend
 
 
-
-
-
-
-// Initialize variables:
-let userName = "Jorge";
-let gameId = "game_4";
-let newGameKey = "new_game";
-
-let score = 0;
-let gameInfo;
-
-let quesIndex = 0;
-let quesNum = quesIndex + 1;
-
-let pressedNext = -1;
-let correctAnsCollection = {};
-let userAnsCollection = {};
-
-
-// Main elements
-let quizForm = document.querySelector(".quizForm"); 
-let acordeon = document.querySelector("#acordeon");
-
-
-function createCongratsCard(score){
-    let finalQuizMessages = [{
-        title: "Congratulations!",
-        message: "You are practically an architect!",
-        score: 9
-    },{
-        title: "Well done!",
-        message: "You seem to like it!",
-        score: 7
-    },{
-        title: "You have passed the test!",
-        message: "Just what everyone knows.",
-        score: 5
-    },{
-        title: "Not good enough...",
-        message: "Obviously, it's not your favorite topic...",
-        score: 3
-    },{
-        title: "Really?!",
-        message: "Come on! You haven't even tried!",
-        score: 0
-    }]
-
-    let index;
-    for (let i=0; i<finalQuizMessages.length; i++){
-        if(score >= finalQuizMessages[i].score){
-            index = i;
-            break;
-        }
-    }
-
-    let title = finalQuizMessages[index].title;
-    let message = finalQuizMessages[index].message;
-    let congratsCard = `<article id="congrats_card" class="question_card">
-        <h3>${title}</h3>
-        <p>${message}</p>
-        <p>${score}/${totalPoints}</p>
-        <button onclick="showAnswers()">Check answers</button>
-    </article>`
-    acordeon.innerHTML += congratsCard;
-}
 
 
 // Función para seleccionar preguntas random desde la API
@@ -225,14 +202,12 @@ function saveQuestionsInLocalStorage(item, name){
         arr.push(item[i]);
     }
     localStorage[name] = JSON.stringify(arr);
-    console.log(item)
 }
 
 function saveGameInLocalStorage(item, name){ // Data tree for firestore: get prev.Games, then add new one and store
     let arr = [];
     arr.push(item);
     localStorage[name] = JSON.stringify(arr);
-    console.log(item)
 }
 
 function getLocalStorageQuestion(name, index){
@@ -389,7 +364,7 @@ function getGameInfo(score, numberOfQuestions){
 }
 
 // Check answers
-function checkAnswers(){
+async function checkAnswers(){
     changeSpanBar();
     let questionNumbersArr = Object.keys(correctAnsCollection);
     let numberOfQuestions = questionNumbersArr.length;
@@ -422,77 +397,75 @@ function checkAnswers(){
     let divButton = document.querySelector("#divButton");
     divButton.innerHTML += '<button id="my_results" class="button"><a href="results.html">MY RESULTS</a></button>';
     acordeon.appendChild(divButton);
-
+    
+    try {
+        
     // Get game info and save it in Local storage and in Firestore:
+    await getUserEmail();
+    await readNumberOfUserGames(userEmail);
     getGameInfo(score, numberOfQuestions);
     saveGameInLocalStorage(gameInfo, "gamesInfo");
-    addGameInfo(userName, gameId, gameInfo);
+    console.log(gameId)
+    console.log(userEmail);
+    addGameInfoToFirestore(userEmail, gameId, gameInfo);
 
     // Acordeon functionality: there is some error but it is not relevant:
     acordeonFunctionality();
-}
 
-
-
-
-
-
-
-
-
-
-
-
-// *GRAFICO PUNTUACIONES.
-// let arrUserList = JSON.parse(localStorage.getItem('game5'));
-let arrUserList = [{
-    id: 1,
-    date: "05-04-2005",
-    score: 9
-},
-{
-    id: 1,
-    date: "06-08-2013",
-    score: 20
-},{
-    id: 1,
-    date: "04-06-2009",
-    score: 15
-},{
-    id: 1,
-    date: "2013-03-23",
-    score: 13
-},{
-    id: 1,
-    date: "2009-05-23",
-    score: 18
-}]
-
-let dateChart = [];
-let scoreChart = [];
-function chartScore (){
-
-    for (i = 0; i < arrUserList.length; i++) {
-        dateChart.push(arrUserList[i].date) ;  
-        scoreChart.push(arrUserList[i].score) ;
+    } catch (error){
+        console.log(`Ha habido un error: ${error}`)
     }
 
-    var data = {
-        // * eje x
-        labels: dateChart,
-        // * valores para el eje x
-        series: [
-            scoreChart
-        ]
-    };
-    //* dimensiones de gráfica.
-    var options = {};
-    // Create a new line chart object where as first parameter we pass in a selector
-    // that is resolving to our chart container element. The Second parameter
-    // is the actual data object. As a third parameter we pass in our custom options.
-    new Chartist.Bar('.ct-chart', data, options);
-  
 }
-/* 
-chartScore();
- */
+
+
+// Congrats card
+function createCongratsCard(score){
+    let finalQuizMessages = [{
+        title: "Congratulations!",
+        message: "You are practically an architect!",
+        score: 9
+    },{
+        title: "Well done!",
+        message: "You seem to like it!",
+        score: 7
+    },{
+        title: "You have passed the test!",
+        message: "Just what everyone knows.",
+        score: 5
+    },{
+        title: "Not good enough...",
+        message: "Obviously, it's not your favorite topic...",
+        score: 3
+    },{
+        title: "Really?!",
+        message: "Come on! You haven't even tried!",
+        score: 0
+    }]
+
+    let index;
+    for (let i=0; i<finalQuizMessages.length; i++){
+        if(score >= finalQuizMessages[i].score){
+            index = i;
+            break;
+        }
+    }
+
+    let title = finalQuizMessages[index].title;
+    let message = finalQuizMessages[index].message;
+    let congratsCard = `<article id="congrats_card" class="question_card">
+        <h3>${title}</h3>
+        <p>${message}</p>
+        <p>${score}/${totalPoints}</p>
+        <button onclick="showAnswers()">Check answers</button>
+    </article>`
+    acordeon.innerHTML += congratsCard;
+}
+
+
+
+
+
+
+
+
