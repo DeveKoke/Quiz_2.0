@@ -54,6 +54,16 @@ logOutButton.addEventListener('click', function (){
     });
 })
 
+// Is user logged?
+function createUserBar(userName){
+    const header = document.getElementById('headerQuiz');
+    let user_idBar = `<div class="idBar">
+                    <p>Hello, ${userName}</p>
+                    </div>`;
+    header.innerHTML += user_idBar;
+}
+
+
 // GRAFICO PUNTUACIONES.
 function chartScore (dateChart, scoreChart){
 
