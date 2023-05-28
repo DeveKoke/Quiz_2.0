@@ -53,7 +53,6 @@ async function readNumberOfUserGames(userEmail){
 
 //Add game to user game info:
 function addGameInfoToFirestore(userEmail, gameId, gameInfo){
-
     console.log(userEmail, gameId, gameInfo)
     db.collection(userEmail).doc(gameId).set(gameInfo).then((docRef) => {
     console.log("Document written with ID: ", docRef.id)
@@ -61,6 +60,24 @@ function addGameInfoToFirestore(userEmail, gameId, gameInfo){
     .catch((error) => console.error("Error adding document: ", error));
 };
 
+/* //Add userID to admins user document:
+function addUserToAdmin(userEmail){
+    // Get previous users ID:
+    let prevUsers = [];
+    db.collection("admin").doc("users").get().then((item) => {
+        let prevUsers = item.data()
+        let addData = [...prevUsers, {"userID": userEmail}];
+        db.collection("admin").doc("users").set(addData).then((docRef) => {
+            console.log("Document written with ID: ", docRef.id)
+            })
+            .catch((error) => console.error("Error adding document: ", error));
+        
+        })
+        .catch((error) => console.error("Error adding document: ", error));
+    // Add new user ID:
+
+};
+ */
 
 
 
@@ -69,9 +86,6 @@ function addGameInfoToFirestore(userEmail, gameId, gameInfo){
 //Initialize Auth
 const auth = firebase.auth();
 const user = auth.currentUser;
-
-//Initialize cloudstore
-//---------------const storage = getStorage();
 
 let signUpForm = document.getElementById("signup_form");
 let logInForm = document.getElementById("login_form");
@@ -103,7 +117,7 @@ signUpForm.addEventListener("submit", async function (event){
                 let user = userCredential.user;
                 console.log(user);
                 signUpForm.reset();
-        });
+            });
     } catch(error) {
         console.log(`There has been an error with code: ${error.code}: ${error.message}`)
     }
@@ -169,7 +183,6 @@ let state = auth.onAuthStateChanged(user => {
         document.querySelector(".auth_form").classList.add("hideCard");
         let userName = auth.currentUser.displayName;
         createUserBar(userName);
-
 
     }else{
         console.log('No logged user');
