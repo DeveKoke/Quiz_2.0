@@ -19,6 +19,8 @@
             <section id="divButton">
                 <button class="button" id="startButton"><a href="/pages/question.html">START</a></button>
             </section>
+            <section class="ranking">
+            </section>
         </main>
         <footer>
             <p>Copyright (c) 2023   Jorge & Jorge  
@@ -27,5 +29,12 @@
             licenses restricting copying, distribution.</p>
         </footer>
     </body>
+    <!-- Insert this script at the bottom of the HTML, but before you use any Firebase services -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-storage.js"></script>
+    <script src="/scripts/homeRanking.js"></script>
 </html>
 
