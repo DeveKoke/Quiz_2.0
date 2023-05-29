@@ -459,27 +459,27 @@ async function checkAnswers(){
 function createCongratsCard(score){
     let finalQuizMessages = [{
         title: "Congratulations!",
-        message: "You are practically as wise as Herodotus",
+        message: `You are practically as wise as Herodotus. Your final score is ${score}.`,
         score: 90,
         imageUrl: "https://www.worldhistory.org/img/r/p/1000x1200/6501.jpg.webp?v=1672313107"
     },{
         title: "Well done!",
-        message: "You nailed it",
+        message: `You nailed it. Your final score is ${score}.`,
         score: 75,
         imageUrl: "https://www.nasa.gov/sites/default/files/styles/full_width/public/thumbnails/image/apollo_14_flag_on_the_moon_w_shepard_as14-66-9231.jpg?itok=TN1Lo0zP"
     },{
-        title: "You have passed the test!",
+        title: `You have passed the test! Your final score is ${score}.`,
         message: "You made it to the shore",
         score: 50,
         imageUrl: "https://cflvdg.avoz.es/sc/bucGdbY4RdMDyXECJi6iR2IgEcM=/768x/2018/11/17/00121542482282564373967/Foto/FN18C11F2_201631.jpg"
     },{
-        title: "Not good news..",
+        title: `Not good news... Your final score is just ${score}.`,
         message: "Seems you ran into an iceberg",
         score: 30,
         imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/St%C3%B6wer_Titanic.jpg/450px-St%C3%B6wer_Titanic.jpg"
     },{
-        title: "Really?!",
-        message: "You've disintegrated before even start the adventure",
+        title: `Really?! Your final score is just ${score}.`,
+        message:"You've disintegrated before even start the adventure",
         score: 0,
         imageUrl: "https://www.history.com/editorial/_next/image?url=https%3A%2F%2Fassets.editorial.aetnd.com%2Fuploads%2F2009%2F11%2Fthe-space-shuttle-challenger-exploded.jpg&w=1080&q=75"
     }]
@@ -498,9 +498,4 @@ function createCongratsCard(score){
     
     sweetAlert(titleAlert, textAlert, imageAlert);
 }
-
-
-
-
-
 
