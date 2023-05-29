@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title> QUIZTORIA </title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+        <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+        <link rel="stylesheet" href="/styles/styles.css">
+    </head>
+    <body class="body_bis">
+        <header>
+            <h1>QUIZTORIA</h1>
+        </header>
+        <main class="main_results">
+            <div class="results_container">
+                <h2>YOUR GAMES RESULTS</h2>
+                <div class="ct-chart ct-perfect-fourth"></div>
+            </div>
+     
+        </main>
+        <footer class="main_footer">
+            <h3>Log out</h3>
+            <button id="logout_button">Log out</button>
+            <p>Copyright (c) 2023   Jorge & Jorge  
+            All Rights Reserved</p> 
+            <p>This product is protected by copyright and distributed under
+            licenses restricting copying, distribution.</p>
+        </footer>
+    </body>
+    <!-- Insert this script at the bottom of the HTML, but before you use any Firebase services -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-storage.js"></script>
+    <script src="/scripts/results.js"></script>
+</html>

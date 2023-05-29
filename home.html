@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title> Quiz 2.0 / QUIZTORY </title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/styles/styles.css">
+</head>
+    <body>
+        <main class="main_bis">
+            <header id="encabezado">
+                <h2>WELCOME TO</h2>
+                <h1>QUIZTORY</h1>
+            </header>
+            <section class="frontWrapper">
+                <p>QUIZTORY, a quiz of random questions about any age, character or historical event. Each will have 4 possible answers with only one correct. When you have chosen the correct one, click on next. At the end of it, you will have a summary with the corrections and your final score.</p>
+                <p>Choose the number of questions, the difficulty and...LET'S PLAY!!</p>
+                <p> ARE YOU READY?? </p>
+            </section>
+            <section id="divButton">
+                <button class="button" id="startButton"><a href="/pages/question.html">START</a></button>
+            </section>
+            <section class="ranking">
+            </section>
+        </main>
+        <footer>
+            <p>Copyright (c) 2023   Jorge & Jorge  
+            All Rights Reserved</p> 
+            <p>This product is protected by copyright and distributed under
+            licenses restricting copying, distribution.</p>
+        </footer>
+    </body>
+    <!-- Insert this script at the bottom of the HTML, but before you use any Firebase services -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-storage.js"></script>
+    <script src="/scripts/homeRanking.js"></script>
+</html>
+
