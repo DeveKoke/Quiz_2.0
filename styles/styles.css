@@ -209,6 +209,7 @@ margin: 0;
 }
 
 
+
 /* FORMATO CARDS */
 .question_card{
   background-color: var(--main-beige-color);
@@ -260,7 +261,6 @@ border: solid var(--main-brown-color);
     flex-direction: column;
     margin: 0 6%;
 }
-
 .acordeon_function .radio_div{
   display: none;
 }

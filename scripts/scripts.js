@@ -1,6 +1,6 @@
 // Initialize variables:
-let userEmail;
-let gameId;
+let userName = "Jorge";
+let gameId = "game_4";
 let newGameKey = "new_game";
 
 let score = 0;
@@ -13,13 +13,9 @@ let pressedNext = -1;
 let correctAnsCollection = {};
 let userAnsCollection = {};
 
-
 // Main elements
 let quizForm = document.querySelector(".quizForm"); 
 let acordeon = document.querySelector("#acordeon");
-
-
-
 
 // FIREBASE FIRESTORE
 // Your web app's Firebase configuration
@@ -80,8 +76,6 @@ function addUserToAdmin(userEmail){
  */
 
 
-
-
 // FIREBASE AUTH
 //Initialize Auth
 const auth = firebase.auth();
@@ -96,7 +90,7 @@ let logOutButton = document.getElementById("logout_button")
 signUpForm.addEventListener("submit", async function (event){
     event.preventDefault();
 
-    let name = document.getElementById("signIn_user_name").value;
+    let userName = document.getElementById("signIn_user_name").value;
     let email = document.getElementById("signIn_email").value;
     let password = document.getElementById("signIn_password").value;
     let repPassword = document.getElementById("signIn_repeat_password").value;
@@ -124,6 +118,8 @@ signUpForm.addEventListener("submit", async function (event){
 
 })
 
+
+
 //Log in function
 logInForm.addEventListener("submit", async function (event){
     event.preventDefault();
@@ -140,13 +136,10 @@ logInForm.addEventListener("submit", async function (event){
     .then((userCredential) => {
       console.log('User authenticated')
       const user = userCredential.user;
-      console.log(userCredential);
-      userEmail = email;
-      console.log(`Hello, ${email}`);
       //logInForm.reset();
     })
     .then(() => {
-        
+        console.log(`Hello, ${email}`);
       })
     .catch((error) => {
       console.log('Invalid user or password');
@@ -156,11 +149,12 @@ logInForm.addEventListener("submit", async function (event){
 
 })
 
+
 //Logout function
 logOutButton.addEventListener('click', function (){
     auth.signOut().then(() => {
-        window.location.href = "/pages/question.html"
-        console.log('Logout user');
+      console.log('Logout user');
+
     }).catch((error) => {
       console.log('Error: ', error)
     });
@@ -175,21 +169,23 @@ function createUserBar(userName){
 }
 
 
+
 //Observe the user's state
 let state = auth.onAuthStateChanged(user => {
     if(user){
+
         console.log('Logged user');
         document.querySelector(".kindWrapper").classList.remove("hideCard");
         document.querySelector(".auth_form").classList.add("hideCard");
         let userName = auth.currentUser.displayName;
         createUserBar(userName);
-
     }else{
-        console.log('No logged user');
-        document.querySelector(".kindWrapper").classList.add("hideCard");
-        document.querySelector(".auth_form").classList.remove("hideCard");
+      console.log('No logged user');
+      document.querySelector(".kindWrapper").classList.add("hideCard");
+      document.querySelector(".auth_form").classList.remove("hideCard");
     }
-})
+  })
+
 
 
 
@@ -197,7 +193,6 @@ let state = auth.onAuthStateChanged(user => {
 // Backend
 // -----------------------------------------------------------------------------------------------------------------------------------------------------
 // Frontend
-
 
 
 
@@ -228,12 +223,14 @@ function saveQuestionsInLocalStorage(item, name){
         arr.push(item[i]);
     }
     localStorage[name] = JSON.stringify(arr);
+    console.log(item)
 }
 
 function saveGameInLocalStorage(item, name){ // Data tree for firestore: get prev.Games, then add new one and store
     let arr = [];
     arr.push(item);
     localStorage[name] = JSON.stringify(arr);
+    console.log(item)
 }
 
 function getLocalStorageQuestion(name, index){
@@ -398,7 +395,7 @@ function getGameInfo(score, numberOfQuestions){
 }
 
 // Check answers
-async function checkAnswers(){
+function checkAnswers(){
     changeSpanBar();
     let questionNumbersArr = Object.keys(correctAnsCollection);
     let numberOfQuestions = questionNumbersArr.length;
@@ -431,15 +428,12 @@ async function checkAnswers(){
     let divButton = document.querySelector("#divButton");
     divButton.innerHTML += '<button id="my_results" class="button"><a href="results.html">MY RESULTS</a></button>';
     acordeon.appendChild(divButton);
-
     //Sweet alert: congrats card:
     createCongratsCard(score)
     
     try {
-        
+
     // Get game info and save it in Local storage and in Firestore:
-    await getUserEmail();
-    await readNumberOfUserGames(userEmail);
     getGameInfo(score, numberOfQuestions);
     saveGameInLocalStorage(gameInfo, "gamesInfo");
     addGameInfoToFirestore(userEmail, gameId, gameInfo);
@@ -447,12 +441,11 @@ async function checkAnswers(){
 
     // Acordeon functionality: there is some error but it is not relevant:
     acordeonFunctionality();
-
-    } catch (error){
-        console.log(`Ha habido un error: ${error}`)
+    } catch {
+        
     }
-
 }
+
 
 
 
@@ -484,13 +477,6 @@ function createCongratsCard(score){
         imageUrl: "https://www.history.com/editorial/_next/image?url=https%3A%2F%2Fassets.editorial.aetnd.com%2Fuploads%2F2009%2F11%2Fthe-space-shuttle-challenger-exploded.jpg&w=1080&q=75"
     }]
 
-    let index;
-    for (let i=0; i<finalQuizMessages.length; i++){
-        if(score >= finalQuizMessages[i].score){
-            index = i;
-            break;
-        }
-    }
 
     let titleAlert = finalQuizMessages[index].title;
     let textAlert = finalQuizMessages[index].message;
